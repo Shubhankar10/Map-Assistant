@@ -1,8 +1,6 @@
 import requests
 from typing import List, Optional
 
-from dotenv import load_dotenv
-import os
 
 class GooglePlacesClient:
     """
@@ -10,9 +8,8 @@ class GooglePlacesClient:
     Supports searching nearby places, text search, and place details.
     """
 
-    def __init__(self):
-        load_dotenv()
-        self.api_key = os.getenv("MAPS_API_KEY")
+    def __init__(self,api_key: str = None):
+        self.api_key = api_key
         self.base_url = "https://places.googleapis.com/v1"
 
     def _headers(self) -> dict:

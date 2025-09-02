@@ -3,15 +3,10 @@ import os
 from dotenv import load_dotenv
 
 class LLMClient:
-    def __init__(self, base_url: str = "https://integrate.api.nvidia.com/v1"):
+    def __init__(self, base_url: str = "https://integrate.api.nvidia.com/v1",api_key: str = None):
         """
         Initialize the LLM client with API key from .env and base URL.
         """
-        # Load variables from .env
-        load_dotenv()
-        print("[LLMClient] Loading environment variables from .env file.")
-
-        api_key = os.getenv("LLM_API_KEY")
         if not api_key:
             raise ValueError("LLM_API_KEY not found in environment. Check your .env file.")
 
