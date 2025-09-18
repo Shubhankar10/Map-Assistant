@@ -1,4 +1,7 @@
 # Map Assistant — Refined Project Specification
+## TODO
+- Make MAPS HTML Page
+- Make User DB connection
 
 ## Project Overview
 

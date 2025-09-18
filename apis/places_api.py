@@ -56,7 +56,8 @@ class GooglePlacesClient:
         """
         Fetch detailed information about a place using its place_id.
         """
-        url = f"{self.base_url}/places/{place_id}"
+        # url = f"{self.base_url}/places/{place_id}"
+        url = f"{self.base_url}/places/ChIJ49OFXeTjDDkRjpYCSUGTE2k"
         response = requests.get(url, headers=self._headers())
         response.raise_for_status()
         return response.json()

@@ -1,6 +1,4 @@
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
 
 class LLMClient:
     def __init__(self, base_url: str = "https://integrate.api.nvidia.com/v1",api_key: str = None):
