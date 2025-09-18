@@ -1,7 +1,12 @@
 # Map Assistant — Refined Project Specification
 ## TODO
+### Bottom to Top
 - Make MAPS HTML Page
-- Make User DB connection
+- If number of tables in Schema is more change DB struct to per-table individual class.
+- Make Schema
+- Make decompose for each feature
+- **List flow for each feature with Data collection and presentation.**
+
 
 ## Project Overview
 
