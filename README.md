@@ -1,12 +1,21 @@
-# Map Assistant — Refined Project Specification
+# Map Assistant
 ## TODO
 ### Bottom to Top
 - Make MAPS HTML Page
-- If number of tables in Schema is more change DB struct to per-table individual class.
 - Make Schema
 - Make decompose for each feature
 - **List flow for each feature with Data collection and presentation.**
 
+---
+
+- If number of tables in Schema is more change DB struct to per-table individual class.
+(
+Small projects / prototypes → one class (your current design) is totally fine.
+Large apps / production → per-table classes (often called DAO = Data Access Objects) is the clean convention.
+In fact, most frameworks (like Django ORM or SQLAlchemy) use the per-table model approach.
+)
+
+---
 
 ## Project Overview
 

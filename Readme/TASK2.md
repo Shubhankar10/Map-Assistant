@@ -25,8 +25,8 @@ When you build your project (e.g., the **Map Assistant**), the system must be ab
 2. **Decompose (5%)**
 
    * Break the query into **smaller subtasks**.
-   * Example subtasks:
-
+   * Example subtasks/steps:
+   
      * Extract the two input locations.
      * Find the midpoint between A and B.
      * Search for cafes around the midpoint.

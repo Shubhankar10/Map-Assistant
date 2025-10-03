@@ -2,9 +2,6 @@ from openai import OpenAI
 
 class LLMClient:
     def __init__(self, base_url: str = "https://integrate.api.nvidia.com/v1",api_key: str = None):
-        """
-        Initialize the LLM client with API key from .env and base URL.
-        """
         if not api_key:
             raise ValueError("LLM_API_KEY not found in environment. Check your .env file.")
 
@@ -17,11 +14,8 @@ class LLMClient:
 
 
     def query(self, user_input: str, model: str = "deepseek-ai/deepseek-v3.1") -> str:
-        """
-        Send a query to the LLM and return the full response text.
-        Streams the response and collects reasoning + content.
-        """
-        print(f"[LLMClient] Query started: '{user_input}'")
+        # print(f"[LLMClient] Query started: '{user_input}'")
+        print(f"[LLMClient] Query sent to model.")
         completion = self.client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": user_input}],
