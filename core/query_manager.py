@@ -1,7 +1,6 @@
-
+#Rujhil vala
 
 # Input User Query, Pass on to Decomposer with just the query and feature
-
 
 from __future__ import annotations
 import re
