@@ -2,9 +2,16 @@
 ## TODO
 ### Bottom to Top
 - Make MAPS HTML Page
-- Make Schema
-- Make decompose for each feature
-- **List flow for each feature with Data collection and presentation.**
+- Context class and Prompt for each Task
+- In Decompose prompt mai extraction ki requirement direct context class se aa jaye ?
+- Initialize services for API and DB
+- Make Flow - Steps - Federator
+
+
+### Remember
+- Default Task banana hai
+- Prompt ka get funciotn decide karna hai 
+- Service Initalize ko alag karna hai agar zarurat kahi padi toh
 
 ---
 
