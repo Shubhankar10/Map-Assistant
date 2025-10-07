@@ -36,7 +36,7 @@ def initialize_services():
 
 
     # TODO: Initialize your DB client
-    _db_client = initalize_db()
+    # _db_client = initalize_db()
 
     print("[Initializer] All services initialized successfully.")
 
@@ -154,3 +154,6 @@ def search_nearby_by_name(client,place_name: str,radius: int = 1000,place_type: 
         results = results.get("results", []) if isinstance(results, dict) else []
 
     return results[:limit]
+
+initialize_services()
+ask_llm("Hello, how are you?")
