@@ -15,7 +15,6 @@ if __name__ == "__main__":
     Please provide detailed day-wise itinerary including approximate visit duration at each spot, best times to visit to avoid crowds, travel times between locations, and suggested meal breaks.
     If possible, recommend a few hidden gems or local eateries near the main attractions.
     Also, suggest options for evening activities or cultural experiences.
-    Finally, provide a concise summary narration explaining the trade-offs and reasoning for the itinerary.
     """
 
 
@@ -34,6 +33,7 @@ if __name__ == "__main__":
 #Get Flow
     flow = FLOW.get(selected_task, [])
     print(f"[MAIN] Flow Steps fetched for '{selected_task}'")
+
 
 #Federator and Executor
 

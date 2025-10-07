@@ -32,13 +32,35 @@ PROMPT_TEMPLATES = {
     
     
     "ItineraryPlanner": """
-    Extract itinerary planning parameters.
-    Output JSON: {{"city": str, "days": int, "pace": str, "interests": [str], "transport": str|null, "budget": int|null,
-    "must_see": [str], "start_loc": str|null}}
-    User query:
-    "{query}"
-    Return ONLY JSON.
-    """,
+        Extract itinerary planning parameters from the user query.
+        Output JSON matching the ItineraryPlannerContext model:
+
+        {{
+            "city": str,                      
+            "travel_duration": int,          
+            "pace": str,                    
+            "interests": [str],               
+            "dietary_preferences": [str],    
+            "special_needs": [str],           
+            "transport_pref": str|null,      
+            "commute_pref": str|null,         
+            "budget_max": int|null,           
+            "accommodation_type": str|null,   
+            "must_see": [str],                
+            "start_loc": str|null,        
+            "activity_type": str|null,        
+            "preferred_vacation_type": str|null,  
+            "tag": str|null,                  
+            "sub_tag": str|null,              
+            "special_notes": str|null         
+        }}
+
+        User query:
+        "{query}"
+
+        Return ONLY JSON. Do not add explanations or extra text.
+        """,
+
 
 
     "ReviewSummarizer": """

@@ -34,6 +34,7 @@ class GooglePlacesClient:
                 }
             }
         }
+        
         if place_type:
             payload["includedTypes"] = [place_type]
 

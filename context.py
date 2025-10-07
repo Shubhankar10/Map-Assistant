@@ -57,16 +57,37 @@ class TripSuggestionContext(BaseContext):
     pace: Optional[str] = "moderate"
     budget: Optional[str] = None
 
-class ItineraryPlannerContext(BaseContext):
-    city: str
-    days: int
-    pace: Optional[str] = "moderate"
-    interests: Optional[List[str]] = []
-    transport: Optional[str] = None
-    budget: Optional[int] = None
-    must_see: Optional[List[str]] = []
-    start_loc: Optional[str] = None
-#Make this completely for API DB and more
+class ItineraryPlannerContext(BaseModel):
+    # --- Core trip info ---
+    city: str   #Query
+    travel_duration: int  # Query
+    pace: Optional[str] = "moderate"  # Query : relaxed | moderate | fast
+
+    # --- User preferences ---
+    interests: Optional[List[str]] = [] #Query, else DB
+    dietary_preferences: Optional[List[str]] = [] # DB
+    special_needs: Optional[List[str]] = [] # DB
+
+    # --- Budget & logistics ---
+    transport_pref: Optional[str] = None    #DB           # e.g. "train", "flight"
+    commute_pref: Optional[str] = None  #DB        # e.g. "walkable", "short drives"
+    budget_max: Optional[int] = None    #DB          # in local currency
+    accommodation_type: Optional[str] = None    #DB  # e.g. "hotel", "hostel", "villa"
+
+    # --- Activity and location ---
+    must_see: Optional[List[str]] = []        # must-visit sites
+    start_loc: Optional[str] = None           # starting point, e.g. "airport" or hotel name
+    activity_type: Optional[str] = None       # e.g. "sightseeing", "adventure"
+    preferred_vacation_type: Optional[str] = None  # e.g. "family", "romantic", "solo"
+
+    # --- Metadata ---
+    tag: Optional[str] = None                 # primary tag for categorization
+    sub_tag: Optional[str] = None             # sub-category
+    special_notes: Optional[str] = None       # any custom notes / constraints
+
+    #APIs POIs
+    poi_candidates: Optional[Dict[str, List[Dict]]] = {}
+
 
 
 class ReviewSummarizerContext(BaseContext):
