@@ -4,14 +4,21 @@ from pprint import pprint
 
 DB_NAME = "Try"
 DB_USER = "postgres"
-DB_PASSWORD = "pass"
+DB_PASSWORD = "jojo"
 DB_SCHEMA = "mapassitant"
+db = None
+
+def initalize_db():
+    global db
+    db = PostgresDB(host="localhost", dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
+    db.connect(schema=DB_SCHEMA)
+    return db
 
 def main():
 
-    db = PostgresDB(host="localhost", dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
-    db.connect(schema=DB_SCHEMA)
-
+    # db = PostgresDB(host="localhost", dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
+    # db.connect(schema=DB_SCHEMA)
+    initalize_db()
 
     db.clear_all() 
 

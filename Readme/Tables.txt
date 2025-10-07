@@ -1,0 +1,121 @@
+TABLE users 
+user_id 
+first_name 
+last_name
+email 
+password_hash 
+created_at
+
+TABLE user_detials
+user_id 
+dob
+gender
+aadhar_number
+passport_number
+driving_license_number
+spoken_languages
+understood_languages
+native_language
+hometown
+current_city
+address
+phone_number
+home_lat, home_lng
+dietary_preferences (vegetarian, vegan, gluten-free, halal)
+
+
+
+TABLE travel_preferences
+pref_id
+user_id
+budget_min
+budget_max
+transport_pref (preferred mode to reach a city, e.g., car, train, flight)
+commute_pref (preferred mode inside the city, e.g., metro, public transport, walking, private car)
+pace (relaxed, fast, balanced)
+travel_duration_preference (short trip, weekend, 1-week, multi-week)
+travel_group_preference (solo, couple, family, friends, business)
+preferred_regions
+season_preference (summer, winter, monsoon, spring, autumn)
+accommodation_type (hotel, hostel, Airbnb, luxury, budget, etc.)
+special_needs – accessibility, medical, or other travel constraints.
+frequent_travel – bool
+
+
+
+TABLE user_interests
+interest_id
+user_id
+tag (main interest or category, e.g., heritage, food, nature, adventure, nightlife, shopping)
+sub_tag (optional finer classification, e.g., under food: street food, fine dining; under nature: mountains, beaches, forests)
+preferred_vacation_type (beach, mountain, jungle, city, desert, cruise, wellness resort, safari)
+activity_type (cultural, historical, adventure, relaxation, shopping, nightlife, gastronomy, eco-tourism, wellness, sports)
+frequency_of_interest (how often user engages in this type of activity; can help prioritize suggestions)
+special_notes (free text for extra details, e.g., “prefers historical walking tours over museums”)
+
+ONE TO ONE RAKH SAKTE HAI ISSE, LIST Bana k.
+
+
+TABLE trip_journals
+journal_id
+trip_id (references trips table, identifies which trip this journal belongs to)
+day (day number of the trip, e.g., 1, 2, 3…)
+entry_text (the text entry describing the day or experience)
+created_at (timestamp of when the journal entry was created, default NOW())
+location – latitude/longitude or city name for the entry.
+tags – JSON array of tags  (e.g., ["hiking", "museum", "food"]).
+expenses – JSON object detailing daily spendings (food, transport, tickets).
+visited_places
+recommended_for_next_time
+mood
+travel_companions → array of user IDs or names if multiple users are on the trip.
+transportation_used → JSON listing transport modes that day (metro, taxi, walking).
+summary_generated → AI-generated short summary of the day.
+recommendations_generated → AI suggests next-day activities based on current journal.
+
+
+container for everything related to a user’s travel. It defines where, when, and with whom the trip is, plus high-level metadata.
+TABLE trips
+trip_id
+user_id
+journal_id
+title 
+city
+country (optional, useful for international trips)
+start_date
+end_date
+status (draft, active, completed, cancelled, paused)
+created_at
+description (optional text describing the trip)
+trip_type (solo, couple, family, friends, business, group)
+total_budget (optional: planned budget for the entire trip)
+transport_mode_to_city (flight, train, car, bus, etc.)
+accommodation_type (hotel, hostel, Airbnb, resort, glamping, etc.)
+tags (JSON array: e.g., ["adventure", "cultural", "foodie"])
+rating (numeric or categorical rating once trip is completed)
+favorite locations (JSON array)
+
+An Itinerary is a detailed schedule for each day of the trip. Each row represents one activity/POI for a specific day, in order.
+TABLE itineraries
+itinerary_id
+trip_id
+days
+pois JSON (array of POIs for the day;)
+created_at
+
+POI JSON
+{
+  "name": "Amber Fort",
+  "type": "sightseeing",          // e.g., restaurant, hotel, museum, activity
+  "order_index" : 1,
+  "lat": 26.9855,
+  "lng": 75.8511,
+  "start_time": "09:00",
+  "end_time": "11:30",
+  "duration_minutes": 150,
+  "cost_estimate": 15,            
+  "activity_type": "cultural",
+  "notes": "Book tickets in advance",
+  "mood_or_rating": null,         // user feedback / reviews summarized
+  "tags": ["historic", "must-see", "family-friendly"],
+}

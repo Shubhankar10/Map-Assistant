@@ -1,6 +1,7 @@
 from query_manager import QueryAnalyzer
 from decomp import Decomposer
 from steps import initialize_services
+from flow import FLOW
 
 if __name__ == "__main__":
 
@@ -31,6 +32,8 @@ if __name__ == "__main__":
     context = decomposer.run()
 
 #Get Flow
+    flow = FLOW.get(selected_task, [])
+    print(f"[MAIN] Flow Steps fetched for '{selected_task}'")
 
 #Federator and Executor
 

@@ -2,23 +2,35 @@
 
 -- 1. Users
 CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
+  user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    first_name, 
+    last_name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
+    phone number 
     password_hash TEXT NOT NULL,
-    timezone TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
 );
 
+user_details (
+    Travel documents: Aadhar, passport, driving license
+    Spoken/Understood languages : 
+    hometown
+    current city
+    Address
+)
+
+Saved searches / favorites / frequently used routes
+
 -- 2. User Preferences
-CREATE TABLE user_preferences (
+CREATE TABLE travel_preferences (
     pref_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
     budget_min INT,
     budget_max INT,
-    transport_pref TEXT,       -- e.g. car, train, walking
+    transport_pref TEXT, to reach a city      -- e.g. car, train, walking
+    commute_pref, inside a city --metro public tansport walk private car
     pace TEXT,                 -- relaxed, fast, balanced
-    created_at TIMESTAMP DEFAULT NOW()
+    companions count  --grouptravel/solo travel/family/friends prefernce
 );
 
 -- 3. User Interests

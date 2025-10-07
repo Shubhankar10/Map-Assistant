@@ -29,10 +29,10 @@ class PostgresDB:
             if schema:
                 # safe param: schema name should be validated if user input in prod
                 self.cursor.execute(f"SET search_path TO {schema};")
-                print(f"📂 Schema set to: {schema}")
-            print("✅ Database connected successfully")
+                print(f"[DB] Schema set to: {schema}")
+            print("[DB] Database connected successfully")
         except Exception as e:
-            print("❌ Connection failed:", e)
+            print("[DB] Connection failed:", e)
             raise
 
     def close(self):
@@ -162,7 +162,7 @@ class PostgresDB:
         return self.execute_query("SELECT * FROM user_interests WHERE interest_id = %s;", (interest_id,), fetchone=True)
 
     def get_interests_by_user(self, user_id: int) -> List[Dict]:
-        return self.execute_query("SELECT * FROM user_interests WHERE user_id = %s ORDER BY interest_id;", (user_id,), fetchall=True)
+        return self.execute_query("SELECT tag FROM user_interests WHERE user_id = %s ORDER BY interest_id;", (user_id,), fetchall=True)
 
     def update_interest(self, interest_id: int, tag: str) -> int:
         return self.execute_query("UPDATE user_interests SET tag = %s WHERE interest_id = %s;", (tag, interest_id))

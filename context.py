@@ -48,7 +48,6 @@ except ImportError:
 class BaseContext(PydanticBase):
     request_id: Optional[str] = None
     user_id: Optional[str] = None
-    flow_key: Optional[str] = None
 
 # Contexts per task
 class TripSuggestionContext(BaseContext):
@@ -67,6 +66,8 @@ class ItineraryPlannerContext(BaseContext):
     budget: Optional[int] = None
     must_see: Optional[List[str]] = []
     start_loc: Optional[str] = None
+#Make this completely for API DB and more
+
 
 class ReviewSummarizerContext(BaseContext):
     poi_id: Optional[str]
@@ -90,3 +91,4 @@ class TripJournalContext(BaseContext):
     start_date: Optional[str]
     end_date: Optional[str]
     tags: Optional[List[str]] = []
+
