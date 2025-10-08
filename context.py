@@ -35,7 +35,7 @@ tags
 
 """
 
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 try:
     from pydantic import BaseModel, Field
@@ -86,9 +86,11 @@ class ItineraryPlannerContext(BaseModel):
     special_notes: Optional[str] = None       # any custom notes / constraints
 
     #APIs POIs
-    poi_candidates: Optional[Dict[str, List[Dict]]] = {}
+    # poi_candidates: Optional[Dict[str, List[Dict]]] = {} #Make this type later
+    
+    poi_candidates: Optional[List[Dict[str, Any]]] = {}
 
-
+# must_see,activity_type,interests,travel_duration,pace,city
 
 class ReviewSummarizerContext(BaseContext):
     poi_id: Optional[str]

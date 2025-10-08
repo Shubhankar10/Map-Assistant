@@ -2,7 +2,7 @@ from apis.places_api import GooglePlacesClient
 
 
 
-from steps import (get_location_for_place,reverse_lookup,search_nearby_by_name,)
+from steps import (get_location_for_place,extract_data_from_apiresponse)
 # from places_client import GooglePlacesClient
 
 from dotenv import load_dotenv
@@ -56,22 +56,6 @@ def main():
     # # 3) Search nearby (by place name)
     # nearby = search_nearby_by_name(client, "Hawa Mahal Jaipur", place_type="restaurant", radius=800)
     # print("Restaurants near Hawa Mahal:", [r["name"] for r in nearby[:3]])
-
-
-def extract_data_from_apiresponse(place):
-    extracted_data = {
-        "name": place["displayName"]["text"],
-        "address": place.get("shortFormattedAddress", ""),
-        "place_id": place.get("id", ""),
-        "types": place.get("types", []),
-        "location": place.get("location", {}),
-        "googleMapsUri": place.get("googleMapsUri", ""),  
-        "review": place["reviewSummary"]["text"],
-        "rating": place.get("rating", None),
-        # Add more fields as needed
-    }
-    print("Extracted Data:", extracted_data)
-    return extracted_data
 
 
 if __name__ == "__main__":
