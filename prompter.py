@@ -72,13 +72,47 @@ PROMPT_TEMPLATES = {
     """,
 
     "MeetingPointPlanner": """
-    Extract participants and constraints for meeting point recommendation.
-    Output JSON: {"participants": [{"id": str|null, "lat": float|null, "lon": float|null, "label": str|null}],
-    "preferred_mode": "walk|drive|transit", "time_window": str|null}
+    Extract all relevant participants, constraints, and preferences from the user query for planning a meeting point.  
+    Output JSON matching the MeetingPointContext model.
+
+    JSON Format:
+    {{
+        "participants": [
+            {{
+                "id": str|null,          # optional unique identifier for participant
+                "label": str|null,       # e.g., "Me", "Friend", "Colleague"
+                "lat": float|null,       # optional, if known
+                "lon": float|null,       # optional, if known
+                "address": str|null      # optional textual address
+                "avoid_long_distance": bool|null,                 # true if someone cannot travel far
+            }}
+        ],
+        "preferred_mode": "walk|drive|transit|metro|null",  # primary travel mode for participants
+        "max_travel_time_minutes": int|null,                # optional travel time limit per participant
+        "accessibility_needs": [str],                      # e.g., ["wheelchair"], empty if none
+        "cuisine_type": [str],                              # e.g., ["Italian", "Chinese"], empty if unspecified
+        "venue_type": [str],                                # e.g., ["restaurant", "cafe"], empty if unspecified
+        "budget_max_per_person": int|null,                 # optional
+        "open_now": bool|null,                             # optional, default true if unspecified
+        "time_window": str|null,                           # e.g., "7 PM - 9 PM"
+        "central_location_priority": bool|null,           # true if preference to meet at midpoint
+        "tag": str|null,
+        "sub_tag": str|null,
+        "special_notes": str|null
+    }}
+
     User query:
     "{query}"
-    Return ONLY JSON.
+
+    Instructions:
+    - Extract all participants and assign IDs or labels where possible.  
+    - Determine participant constraints and travel preferences.  
+    - Determine venue preferences (cuisine, type, budget, open_now).  
+    - Extract time_window if specified.
+    - Identify constraints such as avoid_long_distance or accessibility_needs.
+    - Return ONLY JSON; do not include explanations or extra text.
     """,
+
 
     "RouteOptimizer": """
     Extract origin and destinations for route optimization.

@@ -1,4 +1,7 @@
 from openai import OpenAI
+import os
+def initialize_llm_client(api_key: str = None):
+    return LLMClient(api_key=os.getenv("LLM_API_KEY"))
 
 class LLMClient:
     def __init__(self, base_url: str = "https://integrate.api.nvidia.com/v1",api_key: str = None):

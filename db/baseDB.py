@@ -338,3 +338,5 @@ class PostgresDB:
             self.conn.rollback()
             print("❌ Failed to clear all tables:", e)
             raise
+
+

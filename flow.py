@@ -23,6 +23,33 @@ Return Response
 
 """
 FLOW = {
+
+'MeetingPointPlanner': [
+
+    # 2️⃣ Fetch participant details from DB
+    'fetch_participant_details',         
+
+    # 3️⃣ Geocode addresses (if needed)
+    'geocode_participant_addresses',     # Convert textual addresses into coordinates for calculations
+
+    # 6️⃣ Calculate optimal midpoint
+    'calculate_optimal_midpoint',        # Compute central or weighted midpoint location between participants
+
+
+    # 4️⃣ Generate candidate venues
+    'generate_candidate_venues',         # Query Google Places API based on cuisine_type, venue_type, budget, open_now
+
+    # 5️⃣ Pre-filter candidate venues
+    'pre_filter_venues',                 # Remove venues that don't satisfy time_window, max_travel_time, accessibility, or distance constraints
+
+
+    # 8️⃣ Generate response
+    'generate_narration',                # Optional: create human-readable explanation / suggestions for selected venues
+
+    # # 9️⃣ Return final result
+    'return_response'                    # Return selected venues, midpoint info, and structured data
+],
+
 'ItineraryPlanner':[
 
     # Get Data from DB where context is none.
@@ -59,3 +86,5 @@ FLOW = {
 #     return_response
 ]
 }
+
+

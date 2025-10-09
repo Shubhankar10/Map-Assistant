@@ -98,10 +98,46 @@ class ReviewSummarizerContext(BaseContext):
     timeframe: Optional[str] = "all_time"
     sentiment_focus: Optional[str] = "overall"
 
-class MeetingPointContext(BaseContext):
-    participants: Optional[List[Dict]] = []  # {id?, lat?, lon?, label?}
-    preferred_mode: Optional[str] = "walk"
-    time_window: Optional[str] = None
+from typing import List, Optional, Dict
+from pydantic import BaseModel, Field
+
+class MeetingPointContext(BaseModel):
+    """
+    Context model for planning a meeting point between multiple participants.
+    Stores participant locations, preferences, constraints, and other metadata.
+    """
+
+    # --- Participants ---
+    participants: List[Dict] = Field(default_factory=list)
+    # Each participant dict can include:
+    #   id: Optional[str] = unique identifier
+    #   label: Optional[str] = "Me", "Friend", etc.
+    #   lat: Optional[float]
+    #   lon: Optional[float]
+    #   address: Optional[str] = textual address
+    #   avoid_long_distance: Optional[bool] = None  # participant-specific
+
+    # --- Transportation and commute preferences ---
+    preferred_mode: Optional[str] = "walk"  # "walk", "metro", "car", "bike"
+    max_travel_time_minutes: Optional[int] = None  # optional limit per participant
+    accessibility_needs: Optional[List[str]] = Field(default_factory=list)
+    # e.g., "wheelchair", "avoid stairs"
+
+    # --- Meeting place preferences ---
+    cuisine_type: Optional[List[str]] = Field(default_factory=list)  # e.g., ["Italian", "Cafe"]
+    venue_type: Optional[List[str]] = Field(default_factory=list)   # e.g., ["restaurant", "cafe"]
+    budget_max_per_person: Optional[int] = None
+    open_now: Optional[bool] = True
+    time_window: Optional[str] = None  # e.g., "7 PM - 9 PM"
+
+    # --- Constraints for optimization ---
+    central_location_priority: Optional[bool] = True  # prefer midpoint locations
+
+    # --- Metadata / extra info ---
+    tag: Optional[str] = None
+    sub_tag: Optional[str] = None
+    special_notes: Optional[str] = None
+
 
 class RouteOptimizerContext(BaseContext):
     origin: Dict  # {lat, lon, label?}
