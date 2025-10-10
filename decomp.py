@@ -65,7 +65,7 @@ class Decomposer:
 
 
         print(f"[Decomposer] Context Object:\n{context}")
-        print("[Decomposer] Context successfully built.")
+        print("[Decomposer] Context successfully built.\n")
         return context
 
 

@@ -30,7 +30,7 @@ class QueryAnalyzer:
             print(f"[QueryAnalyzer] Warning: LLM returned unexpected task '{response}', defaulting to TripSuggestion.")
             response = "TripSuggestion"
 
-        print(f"[QueryAnalyzer] Selected task: {response}")
+        print(f"[QueryAnalyzer] Selected task: {response}\n")
         return response
     
 

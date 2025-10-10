@@ -3,7 +3,10 @@ from context import ItineraryPlannerContext
 from steps import (
     generate_poi_query,
     get_places_for_queries,
-    ask_llm
+    ask_llm,
+    add_demo_data,
+    extract_data_from_user_profile,
+    populate_context_from_user_profile
 )
 
 class Execute:
@@ -35,24 +38,32 @@ class Execute:
             
             # User DB
             # Federate
+            user_id = add_demo_data()
+            print("[EXECUTER] Demo Data Added.")
+            user_profile = extract_data_from_user_profile(user_id)
+            print("[EXECUTER] User Profile Fetched.")
 
             # Execute
-            # resp = execute_sql(sql)
-
-            # map_to_context(context,db_resp)
+            populate_context_from_user_profile(self.context,user_profile)
+            print("[EXECUTER] Context Filled.")
 
 
             # API DB
             # Federate
+            
+            print("[EXECUTER] Making POI Queries for API.")
             queries = generate_poi_query(itinerary_data)
-            print("--------------------------------------------------------------------------------------")
+            # print("--------------------------------------------------------------------------------------")
             print(queries)
+
             # Execute
-            # self.context.poi_candidates = get_places_for_queries(queries)
+            print("[EXECUTER] Getting POIs using API.")
+            self.context.poi_candidates = get_places_for_queries(queries)
             
             #Integrate
-            # final = ask_llm("Plan me a detailed itinerary with the following data:\n" + str(self.context) + "\nUser Query:\n" + self.user_query)
-            final = ""
+            print("[EXECUTER] Final LLM Call.")
+            final = ask_llm("Plan me a detailed itinerary with the following data:\n" + str(self.context) + "\nUser Query:\n" + self.user_query)
+
             return final
         
 

@@ -1,6 +1,6 @@
 from db.baseDB import PostgresDB
-
-# DB_HOST = "10.144.192.33"  
+from steps import add_demo_data
+DB_HOST = "10.144.192.33"  
 DB_NAME = "map_assistant" 
 DB_USER = "postgres"
 DB_PASSWORD = "1214" 
@@ -11,7 +11,7 @@ DB_PORT = 5432
 
 # MY
 
-DB_HOST = "localhost"
+# DB_HOST = "localhost"
 # DB_NAME = "Try"
 # DB_USER = "postgres"
 # DB_PASSWORD = "jojo"
@@ -33,5 +33,8 @@ def initialize_db_client_new():
 
     return _db_client
 
-initialize_db_client_new()
-_db_client.test()
+# initialize_db_client_new()
+# _db_client.test()
+
+
+add_demo_data()

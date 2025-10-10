@@ -6,6 +6,7 @@ import dataclasses
 import types
 import json
 import re
+from steps import add_demo_data,extract_data_from_user_profile
 
 def context_to_string(context):
     """
@@ -84,13 +85,13 @@ def context_to_string(context):
 
 #Remove Not NULL
 
-print(context_to_string(ItineraryPlannerContext))
+# print(context_to_string(ItineraryPlannerContext))
 
-prompt = get_prompt('sql2', context=context_to_string(ItineraryPlannerContext),user_id = '1')
+# prompt = get_prompt('sql2', context=context_to_string(ItineraryPlannerContext),user_id = '1')
 
-print(prompt)
-response = ask_llm(prompt)
-print(response)
+# print(prompt)
+# response = ask_llm(prompt)
+# print(response)
 
 
 def extract_sql(response: str) -> str:
@@ -101,6 +102,11 @@ def extract_sql(response: str) -> str:
         return sql
     return ""
 
-print(extract_sql(response))
+# print(extract_sql(response))
+from typing import List
+from decimal import Decimal
 
-    
+
+user_id = add_demo_data()
+prof = extract_data_from_user_profile(user_id)
+print(prof)

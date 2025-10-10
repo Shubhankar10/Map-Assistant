@@ -451,24 +451,8 @@ class PostgresDB:
 
 
     # ------------------- Composite / DB-level fetches ------------------- #
-    def get_user_full_profile(self,user_id: str) -> Dict:
-        """
-        Returns a combined object for a user with all related data:
-        {
-            "user": {...},                # users table
-            "details": {...},             # user_details table
-            "preferences": {...},         # travel_preferences table
-            "interests": [...],           # user_interests table
-            "trips": [                    # trips table, each with itineraries and journals
-                {
-                    "trip": {...},
-                    "itineraries": [...],
-                    "journals": [...]
-                },
-                ...
-            ]
-        }
-        """
+    def get_full_profile(self,user_id: str) -> Dict:
+        print("[DB] Fetching Combined User Profile")
         # Fetch main user
         user = self.get_user_by_id(user_id)
         details = self.get_user_details_by_id(user_id)

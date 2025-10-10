@@ -3,6 +3,8 @@ from apis.places_api import GooglePlacesClient
 from db.baseDB import PostgresDB
 from typing import Dict, List, Any,Optional, Tuple
 
+from uuid import uuid4
+
 
 # Move to init ---------------------------------------------------------------------------
 from dotenv import load_dotenv  
@@ -15,10 +17,19 @@ _places_api_client = None
 _db_client = None
 
 
-DB_NAME = "map_assistant"
+# Port
+DB_HOST = "10.144.192.33"  
+DB_NAME = "map_assistant" 
 DB_USER = "postgres"
-DB_PASSWORD = "1214"
+DB_PASSWORD = "1214" 
 DB_SCHEMA = "public"
+
+# Shubhankar Local
+# DB_HOST = "localhost"
+# DB_NAME = "Try"
+# DB_USER = "postgres"
+# DB_PASSWORD = "jojo"
+# DB_SCHEMA = "mapassitant"
 
 def initialize_llm_client():
     global _llm_client
@@ -32,8 +43,9 @@ def initialize_places_client():
 
 def initialize_db_client():
     global _db_client
-    _db_client = PostgresDB(host="localhost", dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
+    _db_client = PostgresDB(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
     _db_client.connect(schema=DB_SCHEMA)
+    print("[Steps] CONNECTED TO HOST.")
     return _db_client
 
 def initialize_services():
@@ -48,7 +60,7 @@ def initialize_services():
     initialize_db_client()
     print("[Initializer] PostgresDB client initialized.")
 
-    print("[Initializer] All services initialized successfully.")
+    print("[Initializer] All services initialized successfully.\n")
 
 
 
@@ -71,20 +83,170 @@ def ask_llm(query: str) -> str:
 
 #DB STEPS --------------------------------------------------------------------------------------------------
 
-def fetch_user_preferences(user_id: str):
-    
-    initialize_db_client()
+def add_demo_data():
+    if _db_client is None:
+        initialize_db_client()
+    _db_client.clear_all()
+    new_user = _db_client.add_user(
+        first_name="Rohan",
+        last_name="Sharma",
+        email="rohan.sharma@studentemail.com",
+        password_hash="hashed_password_here"
+    )
+    user_id = new_user['user_id']
 
-    print("[Steps : fetch_user_preferences] Fetching user preferences...")
-    # Simulate fetching user preferences
-    print("USer ID:", user_id)
-    user_preferences = _db_client.get_prefs_by_user(user_id)
-    print("[Steps : fetch_user_preferences] User preferences fetched.")
-    
-    return user_preferences
+    user_details = _db_client.add_user_details(
+        user_id=user_id,
+        dob="2001-08-20",
+        gender="Male",
+        aadhar_number="1111-2222-3333",
+        passport_number="P1234567",
+        driving_license_number="DL9876543210",
+        spoken_languages=["English", "Hindi"],
+        understood_languages=["English", "Hindi"],
+        native_language="Hindi",
+        hometown="Delhi",
+        current_city="Delhi",
+        address="45 Student Hostel, Delhi University",
+        phone_number="+911234567891",
+        home_lat=28.6139,
+        home_lng=77.2090,
+        dietary_preferences=["Vegetarian", "No Spicy"]
+    )
 
-def exectue_sql(sql:str):
-    return ""
+    travel_pref = _db_client.add_travel_preference(
+        user_id=user_id,
+        budget_min=500.00,
+        budget_max=3000.00,
+        transport_pref="Train",
+        commute_pref="Public Transport",
+        pace="Relaxed",
+        travel_duration_preference="2-5 days",
+        travel_group_preference="Solo/Group",
+        preferred_regions=["Rajasthan", "Uttar Pradesh", "Madhya Pradesh"],
+        season_preference="Winter",
+        accommodation_type="Hostel/Guesthouse",
+        special_needs=None,
+        frequent_travel=True
+    )
+
+    interests = [
+        {
+            "tag": "Culture",
+            "sub_tag": "Heritage Sites",
+            "preferred_vacation_type": "City Break",
+            "activity_type": "Sightseeing",
+            "frequency_of_interest": "Often",
+            "special_notes": "Likes historical monuments"
+        },
+        {
+            "tag": "Food",
+            "sub_tag": "Street Food",
+            "preferred_vacation_type": "City Break",
+            "activity_type": "Culinary Tour",
+            "frequency_of_interest": "Sometimes",
+            "special_notes": "Prefers vegetarian options"
+        }
+    ]
+
+    for interest in interests:
+        _db_client.add_user_interest(
+            user_id=user_id,
+            tag=interest["tag"],
+            sub_tag=interest["sub_tag"],
+            preferred_vacation_type=interest["preferred_vacation_type"],
+            activity_type=interest["activity_type"],
+            frequency_of_interest=interest["frequency_of_interest"],
+            special_notes=interest["special_notes"]
+        )
+
+    print(f"Demo data added for user_id: {user_id}")
+    return user_id
+
+def extract_data_from_user_profile(user_id : str):
+    if _db_client is None:
+        initialize_db_client()
+    user_profile = _db_client.get_full_profile(user_id)
+    return user_profile
+
+def populate_context_from_user_profile(context, user_profile: dict):
+    """
+    Fill missing fields in ItineraryPlannerContext using the provided user_profile.
+    
+    Args:
+        context: ItineraryPlannerContext object with some fields possibly empty or None.
+        user_profile: Dictionary containing 'user', 'details', 'preferences', 'interests'.
+        
+    Returns:
+        context: Updated ItineraryPlannerContext object with missing fields filled from profile.
+    """
+    # 1️⃣ Normalize user profile (convert Decimals and other types)
+    details = user_profile.get("details") or {}
+    preferences = user_profile.get("preferences") or {}
+    interests_list = user_profile.get("interests") or []
+
+    # Flatten interests to just strings (tags + sub_tags)
+    interests_from_profile = []
+    for interest in interests_list:
+        tag = interest.get("tag")
+        sub_tag = interest.get("sub_tag")
+        if tag:
+            interests_from_profile.append(tag)
+        if sub_tag:
+            interests_from_profile.append(sub_tag)
+
+    # 2️⃣ Fill context fields sequentially if empty or None
+    if not context.city and details.get("current_city"):
+        context.city = details.get("current_city")
+
+    if not context.travel_duration and preferences.get("travel_duration_preference"):
+        # Extract numeric days from string like "2-5 days", use average
+        duration_str = preferences.get("travel_duration_preference")
+        try:
+            parts = [int(s) for s in duration_str.split() if s.isdigit()]
+            if len(parts) == 2:
+                context.travel_duration = sum(parts) // 2
+            elif len(parts) == 1:
+                context.travel_duration = parts[0]
+        except Exception:
+            context.travel_duration = 3  # default if parsing fails
+
+    if not context.pace and preferences.get("pace"):
+        context.pace = preferences.get("pace").lower()
+
+    if not context.interests:
+        context.interests = list(set(context.interests or [] + interests_from_profile))
+
+    if not context.dietary_preferences and details.get("dietary_preferences"):
+        context.dietary_preferences = details.get("dietary_preferences")
+
+    if not context.special_needs and preferences.get("special_needs"):
+        context.special_needs = [preferences.get("special_needs")] if preferences.get("special_needs") else []
+
+    if not context.transport_pref and preferences.get("transport_pref"):
+        context.transport_pref = preferences.get("transport_pref")
+
+    if not context.commute_pref and preferences.get("commute_pref"):
+        context.commute_pref = preferences.get("commute_pref")
+
+    if not context.budget_max and preferences.get("budget_max"):
+        context.budget_max = int(preferences.get("budget_max"))
+
+    if not context.accommodation_type and preferences.get("accommodation_type"):
+        context.accommodation_type = preferences.get("accommodation_type")
+
+    if not context.activity_type and interests_list:
+        # pick first activity_type from interests
+        first_activity = interests_list[0].get("activity_type")
+        if first_activity:
+            context.activity_type = first_activity
+
+    if not context.preferred_vacation_type and interests_list:
+        first_vacation_type = interests_list[0].get("preferred_vacation_type")
+        if first_vacation_type:
+            context.preferred_vacation_type = first_vacation_type
+
+    return context
 
 #API STEPS --------------------------------------------------------------------------------------------------
 

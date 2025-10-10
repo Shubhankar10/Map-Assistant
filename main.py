@@ -31,7 +31,9 @@ def main(demo_query):
 
     executor = Execute(selected_task=selected_task, flow=flow, context=context, user_query=demo_query)
     final = executor.execute()
+    
     print(f"[MAIN] Final Output for {selected_task}: \n {final}")
+
     return final 
     
 # Render in Streamlit
