@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from contextlib import contextmanager
 from typing import Optional, Any, Dict, List, Tuple
+import json
 
 
 class PostgresDB:
@@ -123,6 +124,7 @@ class PostgresDB:
     # ------------------- USER DETAIL ------------------- #
 
     def add_user_details(
+            self,
         user_id: str,
         dob: Optional[str] = None,
         gender: Optional[str] = None,
@@ -164,14 +166,14 @@ class PostgresDB:
             fetch='one'
         )
 
-    def get_user_details_by_id(user_id: str) -> Optional[Dict]:
+    def get_user_details_by_id(self,user_id: str) -> Optional[Dict]:
         """
         Fetch a single user_details record by UUID.
         """
         query = "SELECT * FROM user_details WHERE user_id = %s;"
         return self.execute_query(query, (user_id,), fetch='one')
 
-    def delete_user_details(user_id: str) -> int:
+    def delete_user_details(self, user_id: str) -> int:
         """
         Delete a user_details record by UUID. Returns the number of rows deleted.
         """
@@ -181,6 +183,7 @@ class PostgresDB:
 
     # ------------------- USER INTERESTS ------------------- #
     def add_user_interest(
+            self, 
         user_id: str,
         tag: Optional[str] = None,
         sub_tag: Optional[str] = None,
@@ -209,14 +212,14 @@ class PostgresDB:
             fetch='one'
         )
 
-    def get_user_interests_by_user_id(user_id: str) -> List[Dict]:
+    def get_user_interests_by_user_id(self, user_id: str) -> List[Dict]:
         """
         Fetch all user_interests records for a given user UUID.
         """
         query = "SELECT * FROM user_interests WHERE user_id = %s;"
         return self.execute_query(query, (user_id,), fetch='all')
 
-    def delete_user_interest(interest_id: str) -> int:
+    def delete_user_interest(self, interest_id: str) -> int:
         """
         Delete a user_interests record by interest_id. Returns the number of rows deleted.
         """
@@ -225,6 +228,7 @@ class PostgresDB:
 
     # ------------------- TRAVEL PREF ------------------- #
     def add_travel_preference(
+            self, 
         user_id: str,
         budget_min: Optional[float] = None,
         budget_max: Optional[float] = None,
@@ -263,14 +267,14 @@ class PostgresDB:
             fetch='one'
         )
 
-    def get_travel_preference_by_user_id(user_id: str) -> Optional[Dict]:
+    def get_travel_preference_by_user_id(self, user_id: str) -> Optional[Dict]:
         """
         Fetch a single travel_preferences record by user UUID.
         """
         query = "SELECT * FROM travel_preferences WHERE user_id = %s;"
         return self.execute_query(query, (user_id,), fetch='one')
 
-    def delete_travel_preference(user_id: str) -> int:
+    def delete_travel_preference(self, user_id: str) -> int:
         """
         Delete a travel_preferences record by user UUID. Returns the number of rows deleted.
         """
@@ -280,6 +284,7 @@ class PostgresDB:
 
     # ------------------- TRIP ------------------- #
     def add_trip(
+            self, 
         user_id: str,
         title: str,
         city: Optional[str] = None,
@@ -299,6 +304,9 @@ class PostgresDB:
         """
         Inserts a new record into the trips table and returns the created record.
         """
+        tags_json = json.dumps(tags) if tags else None
+        favorite_locations_json = json.dumps(favorite_locations) if favorite_locations else None
+
         query = """
             INSERT INTO trips (
                 user_id, title, city, country, start_date, end_date, status,
@@ -308,24 +316,25 @@ class PostgresDB:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *;
         """
+
         return self.execute_query(
             query,
             (
                 user_id, title, city, country, start_date, end_date, status,
                 description, trip_type, total_budget, transport_mode_to_city,
-                accommodation_type, tags, rating, favorite_locations
+                accommodation_type, tags_json, rating, favorite_locations_json
             ),
             fetch='one'
         )
 
-    def get_trip_by_id(trip_id: str) -> Optional[Dict]:
+    def get_trip_by_id(self, trip_id: str) -> Optional[Dict]:
         """
         Fetch a single trip record by trip_id UUID.
         """
         query = "SELECT * FROM trips WHERE trip_id = %s;"
         return self.execute_query(query, (trip_id,), fetch='one')
 
-    def delete_trip(trip_id: str) -> int:
+    def delete_trip(self, trip_id: str) -> int:
         """
         Delete a trip record by trip_id. Returns the number of rows deleted.
         """
@@ -339,6 +348,7 @@ class PostgresDB:
     # ==============================
 
     def add_trip_journal(
+        self, 
         trip_id: str,
         day: Optional[int] = None,
         entry_text: Optional[str] = None,
@@ -356,6 +366,15 @@ class PostgresDB:
         """
         Inserts a new record into the trip_journals table and returns the created record.
         """
+
+        # ✅ Convert all dict fields to JSON strings
+        location_json = json.dumps(location) if location else None
+        tags_json = json.dumps(tags) if tags else None
+        expenses_json = json.dumps(expenses) if expenses else None
+        visited_places_json = json.dumps(visited_places) if visited_places else None
+        travel_companions_json = json.dumps(travel_companions) if travel_companions else None
+        transportation_used_json = json.dumps(transportation_used) if transportation_used else None
+
         query = """
             INSERT INTO trip_journals (
                 trip_id, day, entry_text, location, tags, expenses, visited_places,
@@ -365,24 +384,25 @@ class PostgresDB:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *;
         """
+
         return self.execute_query(
             query,
             (
-                trip_id, day, entry_text, location, tags, expenses, visited_places,
-                recommended_for_next_time, mood, travel_companions, transportation_used,
-                summary_generated, recommendations_generated
+                trip_id, day, entry_text, location_json, tags_json, expenses_json,
+                visited_places_json, recommended_for_next_time, mood, travel_companions_json,
+                transportation_used_json, summary_generated, recommendations_generated
             ),
             fetch='one'
         )
 
-    def get_trip_journals_by_trip_id(trip_id: str) -> List[Dict]:
+    def get_trip_journals_by_trip_id(self, trip_id: str) -> List[Dict]:
         """
         Fetch all trip_journals records for a given trip UUID.
         """
         query = "SELECT * FROM trip_journals WHERE trip_id = %s;"
         return self.execute_query(query, (trip_id,), fetch='all')
 
-    def delete_trip_journal(journal_id: str) -> int:
+    def delete_trip_journal(self, journal_id: str) -> int:
         """
         Delete a trip_journals record by journal_id. Returns the number of rows deleted.
         """
@@ -393,30 +413,36 @@ class PostgresDB:
     # ==============================
     # ITINERARIES FUNCTIONS
     # ==============================
-
     def add_itinerary(
-        trip_id: str,
-        days: int,
-        pois: Optional[dict] = None
-    ) -> Dict:
+            self, 
+            trip_id: str,
+            days: int,
+            pois: Optional[dict] = None
+        ) -> Dict:
         """
         Inserts a new record into the itineraries table and returns the created record.
         """
         query = """
-            INSERT INTO itineraries (trip_id, days, pois)
+            INSERT INTO itineraries (
+                trip_id, days, pois
+            )
             VALUES (%s, %s, %s)
             RETURNING *;
         """
-        return self.execute_query(query, (trip_id, days, pois), fetch='one')
+        return self.execute_query(
+            query,
+            (trip_id, days, pois),
+            fetch='one'
+        )
 
-    def get_itineraries_by_trip_id(trip_id: str) -> List[Dict]:
+    def get_itineraries_by_trip_id(self, trip_id: str) -> List[Dict]:
         """
         Fetch all itineraries records for a given trip UUID.
         """
         query = "SELECT * FROM itineraries WHERE trip_id = %s;"
         return self.execute_query(query, (trip_id,), fetch='all')
 
-    def delete_itinerary(itinerary_id: str) -> int:
+    def delete_itinerary(self, itinerary_id: str) -> int:
         """
         Delete an itineraries record by itinerary_id. Returns the number of rows deleted.
         """
@@ -450,24 +476,24 @@ class PostgresDB:
         interests = self.get_user_interests_by_user_id(user_id)
         
         # Fetch trips and their nested itineraries and journals
-        trips_list = []
-        trips = self.get_trips_by_user(user_id)  # assumes function returning list of trips for user
-        for trip in trips:
-            trip_id = trip['trip_id']
-            itineraries = self.get_itineraries_by_trip_id(trip_id)
-            journals = self.get_trip_journals_by_trip_id(trip_id)
-            trips_list.append({
-                "trip": trip,
-                "itineraries": itineraries,
-                "journals": journals
-            })
+        # trips_list = []
+        # trips = self.get_trips_by_user(user_id)  # assumes function returning list of trips for user
+        # for trip in trips:
+        #     trip_id = trip['trip_id']
+        #     itineraries = self.get_itineraries_by_trip_id(trip_id)
+        #     journals = self.get_trip_journals_by_trip_id(trip_id)
+        #     trips_list.append({
+        #         "trip": trip,
+        #         "itineraries": itineraries,
+        #         "journals": journals
+        #     })
         
         return {
             "user": user,
             "details": details,
             "preferences": preferences,
             "interests": interests,
-            "trips": trips_list
+            # "trips": trips_list
         }
 
     # ------------------- Utility ------------------- #
@@ -479,16 +505,21 @@ class PostgresDB:
     # ------------------- Clear ------------------- #
     def clear_all(self):
         """
-        Delete all rows from every table in the schema.
+        Delete all rows from every table in the new schema.
         Preserves table structure.
-        ⚠️ Irreversible operation.
+        ⚠ Irreversible operation.
         """
         if not self.cursor:
             raise RuntimeError("DB cursor not initialized. Call connect() first.")
 
         try:
-            tables = ["trip_journals", "itineraries", "trips",
-                    "user_interests", "user_preferences", "users"]
+            # Order matters: dependent tables first, then parent (users)
+            tables = [
+                "user_interests",
+                "travel_preferences",
+                "user_details",
+                "users"
+            ]
             for t in tables:
                 self.cursor.execute(f"TRUNCATE TABLE {t} RESTART IDENTITY CASCADE;")
             self.conn.commit()
@@ -497,5 +528,3 @@ class PostgresDB:
             self.conn.rollback()
             print("❌ Failed to clear all tables:", e)
             raise
-
-

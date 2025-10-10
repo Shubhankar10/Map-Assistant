@@ -1,6 +1,6 @@
 from db.baseDB import PostgresDB
 
-DB_HOST = "10.144.192.33"  
+# DB_HOST = "10.144.192.33"  
 DB_NAME = "map_assistant" 
 DB_USER = "postgres"
 DB_PASSWORD = "1214" 
@@ -11,7 +11,7 @@ DB_PORT = 5432
 
 # MY
 
-# DB_HOST = "localhost"
+DB_HOST = "localhost"
 # DB_NAME = "Try"
 # DB_USER = "postgres"
 # DB_PASSWORD = "jojo"

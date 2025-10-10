@@ -15,10 +15,10 @@ _places_api_client = None
 _db_client = None
 
 
-DB_NAME = "Try"
+DB_NAME = "map_assistant"
 DB_USER = "postgres"
-DB_PASSWORD = "jojo"
-DB_SCHEMA = "mapassitant"
+DB_PASSWORD = "1214"
+DB_SCHEMA = "public"
 
 def initialize_llm_client():
     global _llm_client
