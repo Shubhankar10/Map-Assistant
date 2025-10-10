@@ -83,11 +83,12 @@ def fetch_user_preferences(user_id: str):
     
     return user_preferences
 
-
+def exectue_sql(sql:str):
+    return ""
 
 #API STEPS --------------------------------------------------------------------------------------------------
 
-def generate_poi_query(itinerary_data: dict) -> Dict[str, List[str]]:
+def generate_poi_query(itinerary_data: Any) -> Dict[str, List[str]]:
     
     if _places_api_client is None:
         initialize_places_client()
@@ -95,7 +96,7 @@ def generate_poi_query(itinerary_data: dict) -> Dict[str, List[str]]:
     city = itinerary_data.get("city")
     travel_duration = itinerary_data.get("travel_duration")
     pace = itinerary_data.get("pace")
-    interests = itinerary_data.get("interests") 
+    interests = itinerary_data.get("interests")
     must_see = itinerary_data.get("must_see")
     activity_type = itinerary_data.get("activity_type")
 

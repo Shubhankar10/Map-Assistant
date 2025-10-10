@@ -34,18 +34,28 @@ class Execute:
             print("[MAIN] Itinerary Data prepared.")
             
             # User DB
-            #Federate
+            # Federate
 
-            #Execute
+            # Execute
+            # resp = execute_sql(sql)
 
-            
+            # map_to_context(context,db_resp)
+
+
             # API DB
-            #Federate
+            # Federate
             queries = generate_poi_query(itinerary_data)
-            #Execute
-            self.context.poi_candidates = get_places_for_queries(queries)
-            final = ask_llm("Plan me a detailed itinerary with the following data:\n" + str(self.context) + "\nUser Query:\n" + self.user_query)
+            print("--------------------------------------------------------------------------------------")
+            print(queries)
+            # Execute
+            # self.context.poi_candidates = get_places_for_queries(queries)
+            
+            #Integrate
+            # final = ask_llm("Plan me a detailed itinerary with the following data:\n" + str(self.context) + "\nUser Query:\n" + self.user_query)
+            final = ""
             return final
+        
+
         elif self.selected_task == "MeetingPointPlanner":
             # Implement execution logic for MeetingPointPlanner
             pass

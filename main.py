@@ -1,13 +1,9 @@
 from query_manager import QueryAnalyzer
 from decomp import Decomposer
-from steps import initialize_services,get_places_for_queries,generate_poi_query,ask_llm
+from steps import initialize_services,ask_llm
 from flow import FLOW
 from executor import Execute
 from prompter import get_prompt
-
-import streamlit as st
-import markdown
-import pdfkit
 
 
 def main(demo_query):
@@ -31,14 +27,14 @@ def main(demo_query):
     print(f"[MAIN] Flow Steps fetched for '{selected_task}'")
 
 
-#Federator and Executor
+#Federator and Executor and Integrate
 
     executor = Execute(selected_task=selected_task, flow=flow, context=context, user_query=demo_query)
     final = executor.execute()
-    print(final)
+    print(f"[MAIN] Final Output for {selected_task}: \n {final}")
     return final 
     
-#Integrate
+# Render in Streamlit
 
 
 
@@ -58,5 +54,5 @@ if __name__ == "__main__":
     """
     # demo_query = "I live in Govindpuri, Delhi, and my friend lives in Gurgaon. We are planning to meet for dinner at an Italian restaurant. I cannot travel long distances, and my friend will be using the metro. Please suggest Italian restaurants or cafes that are in a manageable location for both of us"
     
-    demo_query = "hi How are you, What is your name?"
+    # demo_query = "hi How are you, What is your name?"
     main(demo_query)
