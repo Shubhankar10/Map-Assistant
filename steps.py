@@ -1,8 +1,10 @@
 from apis.llm_api import LLMClient
-from main_dbconnect import initalize_db
 from apis.places_api import GooglePlacesClient
 from db.baseDB import PostgresDB
 from typing import Dict, List, Any,Optional, Tuple
+
+
+# Move to init ---------------------------------------------------------------------------
 from dotenv import load_dotenv  
 import os
 load_dotenv()
@@ -34,7 +36,6 @@ def initialize_db_client():
     _db_client.connect(schema=DB_SCHEMA)
     return _db_client
 
-
 def initialize_services():
     global _llm_client, _places_api_client, _db_client
 
@@ -48,6 +49,9 @@ def initialize_services():
     print("[Initializer] PostgresDB client initialized.")
 
     print("[Initializer] All services initialized successfully.")
+
+
+
 
 #LLM STEPS --------------------------------------------------------------------------------------------------
 

@@ -33,8 +33,17 @@ class Execute:
             }
             print("[MAIN] Itinerary Data prepared.")
             
+            # User DB
+            #Federate
+
+            #Execute
+
             
-            self.context.poi_candidates = get_places_for_queries(generate_poi_query(itinerary_data))
+            # API DB
+            #Federate
+            queries = generate_poi_query(itinerary_data)
+            #Execute
+            self.context.poi_candidates = get_places_for_queries(queries)
             final = ask_llm("Plan me a detailed itinerary with the following data:\n" + str(self.context) + "\nUser Query:\n" + self.user_query)
             return final
         elif self.selected_task == "MeetingPointPlanner":

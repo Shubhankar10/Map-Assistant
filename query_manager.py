@@ -9,7 +9,8 @@ class QueryAnalyzer:
         "ReviewSummarizer",
         "MeetingPointPlanner",
         "RouteOptimizer",
-        "TripJournalManager"
+        "TripJournalManager",
+        "NoneOfThese"
     ]
 
     def __init__(self):

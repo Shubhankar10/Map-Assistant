@@ -21,6 +21,65 @@ PROMPT_TEMPLATES = {
     
     
 
+    "sql": """
+You are given a PostgreSQL schema (below).  
+Generate **only one valid SQL SELECT query** using the schema and a JSON context.
+
+**Rules**
+1. Output **only** the SQL query — no explanations.  
+2. Query must be valid PostgreSQL.  
+3. Select and join only tables/columns from the schema.  
+4. Always filter by `"user_id"` from the JSON. If missing, return: `user_id missing`.  
+5. Select only columns listed in JSON. If none given, select a minimal meaningful set.  
+6. Use explicit JOINs via foreign keys.  
+7. Use `ILIKE` for text matches.  
+8. For text arrays → `&& ARRAY[...]::text[]` (overlap) or `= ANY(ARRAY[...])` (single match).  
+9. For numeric/date ranges → use `>=`, `<=`, or `BETWEEN`.  
+10. Multiple filter values → match any (`IN`, `ILIKE OR`, or array overlap).  
+11. Respect `"order_by"`, `"limit"`, `"offset"` if present.  
+12. Use aggregates/grouping if requested.  
+13. Escape strings properly.  
+14. End query with a semicolon.
+
+**Schema**
+Tables:
+
+user_details(user_id UUID PK, dob DATE, gender VARCHAR(20), aadhar_number VARCHAR(20),
+passport_number VARCHAR(20), driving_license_number VARCHAR(20),
+spoken_languages TEXT[], understood_languages TEXT[], native_language VARCHAR(50),
+hometown VARCHAR(100), current_city VARCHAR(100), address TEXT, phone_number VARCHAR(20),
+home_lat DECIMAL(9,6), home_lng DECIMAL(9,6), dietary_preferences TEXT[],
+FK user_id → users.user_id)
+
+travel_preferences(pref_id UUID PK, user_id UUID FK→users.user_id,
+budget_min NUMERIC(10,2), budget_max NUMERIC(10,2), transport_pref VARCHAR(50),
+commute_pref VARCHAR(50), pace VARCHAR(20), travel_duration_preference VARCHAR(50),
+travel_group_preference VARCHAR(50), preferred_regions TEXT[], season_preference VARCHAR(50),
+accommodation_type VARCHAR(50), special_needs TEXT, frequent_travel BOOLEAN)
+
+user_interests(interest_id UUID PK, user_id UUID FK→users.user_id,
+tag VARCHAR(100), sub_tag VARCHAR(100), preferred_vacation_type VARCHAR(50),
+activity_type VARCHAR(100), frequency_of_interest VARCHAR(50), special_notes TEXT)
+
+
+**JSON context**
+{context}
+{user_id}
+
+**Output**
+Return a single SQL query following the above rules.
+
+    """,
+
+"sql2": """
+
+There are 3 tables  : user_details,user_interests,travel_preferences, each has a user_id attribute.
+Write a PostgresSQL query, where user_id = {user_id}
+It should be a simple query, just get all all row values for each table with that user_id, nothing else.
+
+**Output**
+Return a single SQL query following the above rules.
+""",
 
     "TripSuggestion": """
     You are an assistant that extracts structured trip suggestion parameters.
@@ -28,9 +87,9 @@ PROMPT_TEMPLATES = {
     User query:
     "{query}"
     Return ONLY JSON.
-    """,
-    
-    
+    """, 
+
+
     "ItineraryPlanner": """
         Extract itinerary planning parameters from the user query.
         Output JSON matching the ItineraryPlannerContext model:
@@ -62,6 +121,13 @@ PROMPT_TEMPLATES = {
         """,
 
 
+    "NoneOfThese": """
+    You are a map assistant. The user's query does not fit into any predefined category. 
+    Respond directly and naturally to the user's query: {{user_query}} — do not include any introductory or meta statements before your answer. 
+    After providing your full response, conclude with a short statement such as:
+    "I can also assist you more precisely with map-related tasks, like planning trips and routes."
+    """,
+
 
     "ReviewSummarizer": """
     Extract target for review summarization.
@@ -70,6 +136,7 @@ PROMPT_TEMPLATES = {
     "{query}"
     Return ONLY JSON.
     """,
+
 
     "MeetingPointPlanner": """
     Extract all relevant participants, constraints, and preferences from the user query for planning a meeting point.  
@@ -122,6 +189,7 @@ PROMPT_TEMPLATES = {
     "{query}"
     Return ONLY JSON.
     """,
+
 
     "TripJournalManager": """
     Extract trip journal parameters.

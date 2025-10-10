@@ -1,17 +1,11 @@
 # Map Assistant
 ## TODO
-### Bottom to Top
+- Add Fetch from DB Step
+- Make the other TASKs
+- Report
+- Flow Rakhna hai ya nahi decide
 - Make MAPS HTML Page
-- Context class and Prompt for each Task
-- In Decompose prompt mai extraction ki requirement direct context class se aa jaye ?
-- Initialize services for API and DB
-- Make Flow - Steps - Federator
-
-
-### Remember
 - Default Task banana hai
-- Prompt ka get funciotn decide karna hai 
-- Service Initalize ko alag karna hai agar zarurat kahi padi toh
 
 ---
 

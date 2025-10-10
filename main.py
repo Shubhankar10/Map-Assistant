@@ -3,7 +3,7 @@ from decomp import Decomposer
 from steps import initialize_services,get_places_for_queries,generate_poi_query,ask_llm
 from flow import FLOW
 from executor import Execute
-
+from prompter import get_prompt
 
 import streamlit as st
 import markdown
@@ -20,6 +20,8 @@ def main(demo_query):
     selected_task = analyzer.select_task(demo_query)
     print(f"[MAIN] Selected Task: {selected_task}")
 
+    if selected_task == "NoneOfThese":
+        return ask_llm(get_prompt("NoneOfThese", user_query=demo_query))
 #Decomposer
     decomposer = Decomposer(query=demo_query, task=selected_task)
     context = decomposer.run()
@@ -56,4 +58,5 @@ if __name__ == "__main__":
     """
     # demo_query = "I live in Govindpuri, Delhi, and my friend lives in Gurgaon. We are planning to meet for dinner at an Italian restaurant. I cannot travel long distances, and my friend will be using the metro. Please suggest Italian restaurants or cafes that are in a manageable location for both of us"
     
+    demo_query = "hi How are you, What is your name?"
     main(demo_query)
