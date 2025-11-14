@@ -152,9 +152,10 @@ Return a single SQL query following the above rules.
                 "lon": float|null,       # optional, if known
                 "address": str|null      # optional textual address
                 "avoid_long_distance": bool|null,                 # true if someone cannot travel far
+                "preferred_mode": "walk|drive|transit|metro|null"
             }}
         ],
-        "preferred_mode": "walk|drive|transit|metro|null",  # primary travel mode for participants
+        "preferred_mode": "drive",  # primary travel mode for participants
         "max_travel_time_minutes": int|null,                # optional travel time limit per participant
         "accessibility_needs": [str],                      # e.g., ["wheelchair"], empty if none
         "cuisine_type": [str],                              # e.g., ["Italian", "Chinese"], empty if unspecified
@@ -172,12 +173,11 @@ Return a single SQL query following the above rules.
     "{query}"
 
     Instructions:
-    - Extract all participants and assign IDs or labels where possible.  
-    - Determine participant constraints and travel preferences.  
-    - Determine venue preferences (cuisine, type, budget, open_now).  
-    - Extract time_window if specified.
+    - Extract all participants and assign labels.  
+    - **CRITICAL:** If a *specific* participant mentions a travel mode (e.g., "my friend uses the metro", "I will be driving"), add it to that participant's "preferred_mode" field.
+    - If a general travel mode is mentioned, put it in the top-level "preferred_mode" field.
     - Identify constraints such as avoid_long_distance or accessibility_needs.
-    - Return ONLY JSON; do not include explanations or extra text.
+    - Return ONLY JSON.
     """,
 
 

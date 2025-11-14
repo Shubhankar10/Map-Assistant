@@ -1,6 +1,5 @@
 import requests
-from typing import List, Optional
-
+from typing import List, Optional, Tuple
 
 class GooglePlacesClient:
     """
@@ -62,4 +61,31 @@ class GooglePlacesClient:
         response = requests.get(url, headers=self._headers())
         response.raise_for_status()
         return response.json()
-
+    
+    def reverse_geocode(self, lat: float, lon: float) -> Optional[str]:
+        """
+        Converts (lat, lon) coordinates into a human-readable address.
+        Uses the standard Google Geocoding API.
+        """
+        # Note: This is the v3 Geocoding API endpoint, not the v1 Places
+        base_url = "https://maps.googleapis.com/maps/api/geocode/json" 
+        params = {
+            "latlng": f"{lat},{lon}",
+            "key": self.api_key,
+            # Ask for a general area, not a specific street address
+            "result_type": "political|sublocality|locality", 
+        }
+        
+        try:
+            response = requests.get(base_url, params=params)
+            response.raise_for_status()
+            data = response.json()
+            
+            if data.get("status") == "OK" and data.get("results"):
+                # Return the first, most relevant address
+                return data["results"][0]["formatted_address"]
+            else:
+                return f"{lat},{lon}" # Fallback to coordinates
+        except requests.RequestException as e:
+            print(f"Error calling Reverse Geocode API: {e}")
+            return f"{lat},{lon}"
