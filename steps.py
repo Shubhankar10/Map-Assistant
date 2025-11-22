@@ -24,14 +24,14 @@ _routes_api_client = None
 DB_HOST = "localhost"  
 DB_NAME = "map_assistant" 
 DB_USER = "postgres"
-DB_PASSWORD = "1214" 
+# DB_PASSWORD = "1214" 
 DB_SCHEMA = "public"
 
 # Shubhankar Local
 # DB_HOST = "localhost"
 # DB_NAME = "Try"
 # DB_USER = "postgres"
-# DB_PASSWORD = "jojo"
+DB_PASSWORD = "jojo"
 # DB_SCHEMA = "mapassitant"
 
 def initialize_llm_client():

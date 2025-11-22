@@ -18,6 +18,25 @@ In fact, most frameworks (like Django ORM or SQLAlchemy) use the per-table model
 
 ---
 
+### Steps
+- Query Analyser : Find Task intented by the User [ LLM ]
+
+- IF the task is among the predefined, Go to the Decomposer
+    - Decomposer : Fetches Strictly typed Context Class, and populates it with the user's query data. [ LLM ]
+    - Federator : Fetch all Rows in DB1 for the user_id, generate all POI queries for DB2 (API) based on the Context
+    - Executor : Merge all relevent detials from DB1 into Context and Execute the API Calls and merge the data in Context
+
+- ELSE, the task is not specifed or new, Go to Custom Decomposer
+    - Decomposer : Calls LLM to make a loose Context JSON, Filles the JSON with the User's query data [ LLM ]
+    - Federator : Calls LLM to make a mapping for relevent data from DB1 to user's task and generate POI queries. [ LLM ]
+    - Executor : Merge all relevent detials from DB1 into JSON with the help of mapping and Execute the API Calls and merge the data in JSON
+    
+- Integrate : Pass the Filled Context to LLM to get the final respose for the user's query [ LLM ]
+
+
+
+---
+
 ## Project Overview
 
 The Map Assistant is an intelligent travel planner that integrates two relational databases — one for **user & trip data** and another for **POI, routes, and cached API results** — along with an **LLM layer** for natural language interpretation, summarization, and explanation.

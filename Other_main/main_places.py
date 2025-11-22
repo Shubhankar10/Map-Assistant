@@ -2,7 +2,7 @@ from apis.places_api import GooglePlacesClient
 
 
 
-from steps import (get_location_for_place,extract_data_from_apiresponse)
+from steps import (get_location_for_place)
 # from places_client import GooglePlacesClient
 
 from dotenv import load_dotenv
@@ -17,13 +17,13 @@ def main_old():
     # print("Nearby Cafes:", cafes[:1])  # just show 2 results
 
     # Example 2: Text search
-    pizza_places = client.text_search("Best Tourist Places in Jaipur")
+    pizza_places = client.text_search("List Cities in which Haldirams have their outlets in India")
     # print("Pizza Search:", pizza_places.get('display_name'))
-    print(len(pizza_places))
+    print(pizza_places)
     for place in pizza_places:
         print(place["displayName"]["text"])
         print()
-        extract_data_from_apiresponse(place)
+        # extract_data_from_apiresponse(place)
     # with open("places.txt", "w", encoding="utf-8") as f:
     #     f.write(str(pizza_places))
     # import json
@@ -40,18 +40,18 @@ def main_old():
     #     # print("Details of first cafe:", details)
 
 
-def main():
-    # 1) Get coordinates for a landmark
-    coords = get_location_for_place("Hawa Mahal Jaipur")
-    print("Hawa Mahal coords:", coords)
+# def main():
+#     # 1) Get coordinates for a landmark
+#     coords = get_location_for_place("Hawa Mahal Jaipur")
+#     print("Hawa Mahal coords:", coords)
 
-    # 2) Reverse lookup
-    if coords:
-        details = reverse_lookup(lat=coords[0], lon=coords[1])
-        print("Reverse lookup details:", {
-            "name": details.get("name"),
-            "address": details.get("formatted_address")
-        })
+#     # 2) Reverse lookup
+#     if coords:
+#         details = reverse_lookup(lat=coords[0], lon=coords[1])
+#         print("Reverse lookup details:", {
+#             "name": details.get("name"),
+#             "address": details.get("formatted_address")
+#         })
 
     # # 3) Search nearby (by place name)
     # nearby = search_nearby_by_name(client, "Hawa Mahal Jaipur", place_type="restaurant", radius=800)

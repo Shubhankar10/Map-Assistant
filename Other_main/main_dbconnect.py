@@ -8,6 +8,7 @@ def main():
     # db = PostgresDB(host="localhost", dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
     # db.connect(schema=DB_SCHEMA)
     db = initialize_db_client()
+    db.clear_all()
 
     # db.clear_all() 
 
@@ -117,7 +118,7 @@ def main():
     # db.execute_query(""" SELECT 'user_details' AS table_name, to_json(users) AS row_data FROM users WHERE user_id = %s
     #                  UNION ALL SELECT 'user_interests' AS table_name, to_json(user_interests) AS row_data FROM user_interests WHERE user_id = %s 
     #                  UNION ALL SELECT 'travel_preferences' AS table_name, to_json(travel_preferences) AS row_data FROM travel_preferences WHERE user_id = %s """,(user_id,user_id,user_id))
-    print(db.get_user_full_profile(user_id))
+    print(db.get_full_profile(user_id))
 
     
     db.clear_all()
