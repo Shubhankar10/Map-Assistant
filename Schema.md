@@ -1,6 +1,9 @@
 -- Enable UUID generation functions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+Rujhil IP
+192.168.41.245
+
 -- ==============================
 -- USERS TABLE
 -- ==============================

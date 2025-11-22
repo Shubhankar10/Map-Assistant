@@ -34,19 +34,14 @@ class GoogleRoutesClient:
         headers = {
             "Content-Type": "application/json",
             "X-Goog-Api-Key": self.api_key,
-            "X-Goog-FieldMask": "routes.duration,routes.distanceMeters,routes.polyline,routes.legs,routes.localizedValues"
+            "X-Goog-FieldMask": "routes.duration,routes.distanceMeters,routes.polyline,routes.legs"
         }
 
         payload = {
             "origin": origin,
             "destination": destination,
-            "travelMode": travel_mode,
-            "languageCode": "en-US", 
-            "units": "METRIC"
+            "travelMode": travel_mode
         }
-
-        if travel_mode == "TRANSIT":
-            payload["computeAlternativeRoutes"] = False
 
         if intermediates:
             payload["intermediates"] = intermediates

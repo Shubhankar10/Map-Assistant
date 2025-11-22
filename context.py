@@ -107,7 +107,7 @@ class MeetingPointContext(BaseModel):
     tag: Optional[str] = None
     sub_tag: Optional[str] = None
     special_notes: Optional[str] = None
-    poi_candidates: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
+
 
 class RouteOptimizerContext(BaseContext):
     origin: Dict  # {lat, lon, label?}

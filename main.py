@@ -5,8 +5,6 @@ from flow import FLOW
 from executor import Execute
 from prompter import get_prompt
 
-# from raw_decomposer import RawQueryDecomposer
-
 
 def main(demo_query):
 
@@ -22,9 +20,7 @@ def main(demo_query):
         return ask_llm(get_prompt("NoneOfThese", user_query=demo_query))
 #Decomposer
     decomposer = Decomposer(query=demo_query, task=selected_task)
-    # decomposer = RawQueryDecomposer(query=demo_query)
     context = decomposer.run()
-    print(f"[MAIN] Context from Decomposer: {context}")
 
 #Get Flow
     flow = FLOW.get(selected_task, [])
@@ -58,10 +54,7 @@ if __name__ == "__main__":
     If possible, recommend a few hidden gems or local eateries near the main attractions.
     Also, suggest options for evening activities or cultural experiences.
     """
-    # demo_query = "I live in Govindpuri, Delhi, and my friend lives in Gurgaon. We are planning to meet for dinner at an Italian restaurant. Please suggest Italian restaurants or cafes that are in a manageable location for both of us"
+    # demo_query = "I live in Govindpuri, Delhi, and my friend lives in Gurgaon. We are planning to meet for dinner at an Italian restaurant. I cannot travel long distances, and my friend will be using the metro. Please suggest Italian restaurants or cafes that are in a manageable location for both of us"
     
-    # demo_query = "I want to go to a Hotel chain called Dashaprakash in Cannought Place Delhi, how is it, what are it's reviews ? is it considerd good for ambienece and north indian food ?"
-
-
     # demo_query = "hi How are you, What is your name?"
     main(demo_query)
