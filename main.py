@@ -4,6 +4,9 @@ from steps_new import print_json
 
 from A_query_manager import QueryAnalyzer
 from B_decomposer import Decomposer
+from federation import run as federation_run
+from execution import run as execution_run
+from steps_new import print_json
 
 def main(demo_query):
 
@@ -21,8 +24,18 @@ def main(demo_query):
     
     print("Instructions ")
     print_json(instructions)
-    
 
+#Federator 
+    user_id = "cf96c65d-2bbe-4384-82b5-118badd2892f"
+    plan = federation_run(instructions, user_id)
+
+    print("\nFEDERATION PLAN")
+    print_json(plan)
+
+# Execute plan 
+    result = execution_run(plan)
+    print("\nEXECUTION RESULT")
+    print_json(result)
 
 
 if __name__ == "__main__":
@@ -46,7 +59,7 @@ if __name__ == "__main__":
         "where they're native. Also, suggest top tourist places in state capitals."
     )
 
-    demo_query =  "Based on my favorite cuisines, tell me the cities where these cuisines are most popular and suggest top-rated restaurants in those cities."
+    # demo_query =  "Based on my favorite cuisines, tell me the cities where these cuisines are most popular and suggest top-rated restaurants in those cities."
 
 
     main(demo_query)

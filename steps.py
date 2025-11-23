@@ -21,14 +21,14 @@ _db_client = None
 # DB_HOST = "10.144.192.33"  
 DB_NAME = "map_assistant" 
 # DB_USER = "postgres"
-# DB_PASSWORD = "1214" 
+DB_PASSWORD = "1214" 
 DB_SCHEMA = "public"
 
 # Shubhankar Local
 DB_HOST = "localhost"
 # DB_NAME = "Try"
 DB_USER = "postgres"
-DB_PASSWORD = "jojo"
+# DB_PASSWORD = "jojo"
 # DB_SCHEMA = "mapassitant"
 
 def initialize_llm_client():
