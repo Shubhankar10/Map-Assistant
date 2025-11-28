@@ -43,6 +43,7 @@ Return STRICT JSON with this structure:
 - Keep tasks atomic, independent, and NOT chained.  
 - If needed data is unknown, describe it generically (e.g., "user's languages").  
 - Output MUST be valid JSON. No markdown.
+- Do not think for too long, respond quickly in simpler words.
 
 ### USER QUERY
 \"\"\"{user_query}\"\"\"

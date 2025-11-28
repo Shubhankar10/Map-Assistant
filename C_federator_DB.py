@@ -11,7 +11,6 @@ from steps_new import clean_llm_json
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "Schema.md")
 OUT_PLAN_PATH = os.path.join(os.getcwd(), "last_sql_plan.json")
 
-# SQL prompt (uses Schema.md)
 SQL_PROMPT_TEMPLATE = """
 You are an expert PostgreSQL query generator.
 
@@ -67,13 +66,7 @@ OUTPUT FORMAT (JSON):
 # }
 
 
-class Federator:
-    """
-    Single class handling db_user (NL->SQL), db_llm (LLM prompt generation),
-    and db_places (Places text-query generation). Helper methods are silent;
-    run(...) orchestrates and prints.
-    """
-
+class FederatorDB:
     def __init__(self, schema_path: Optional[str] = None):
         self.schema_path = schema_path or SCHEMA_PATH
         self.schema_text = self._load_schema(self.schema_path)
@@ -85,37 +78,19 @@ class Federator:
         except Exception:
             return "-- Schema file missing."
 
-    # -------- db_user: NL -> SQL helpers --------
-
-    def _build_sql_prompt(self, task: str, user_id: str) -> str:
-        return SQL_PROMPT_TEMPLATE.format(schema=self.schema_text, task=task, user_id=user_id)
-
-    def _call_llm_raw(self, prompt: str) -> str:
-        # Silent wrapper around ask_llm
-        return ask_llm(prompt)
-
     def _clean_sql_from_response(self, response: str) -> str:
-        """
-        Robustly clean SQL returned by LLM:
-         - Extract content inside ```...``` if present
-         - Remove stray backticks and leading "SQL:" prefixes
-         - Return single SQL statement ending with a semicolon
-        """
         if response is None:
             return ""
 
-        # 1) Attempt to extract fenced code block content first
         m = re.search(r'```(?:sql)?\s*([\s\S]*?)\s*```', response, re.IGNORECASE)
         if m:
             sql = m.group(1).strip()
         else:
             sql = response.strip()
 
-        # Remove any "SQL:" prefix or stray fences/backticks
         sql = re.sub(r'^\s*SQL:\s*', '', sql, flags=re.IGNORECASE)
         sql = sql.replace("```", "").replace("`", "").strip()
 
-        # If there are multiple statements, keep up to the first semicolon (heuristic)
         if ";" in sql:
             sql = sql.split(";", 1)[0].strip() + ";"
         else:
@@ -124,46 +99,31 @@ class Federator:
         return sql
 
     def _nl_to_sql(self, task: str, user_id: str) -> str:
-        """
-        Convert a single NL task to SQL using the LLM.
-        Silent; returns cleaned SQL string.
-        """
-        prompt = self._build_sql_prompt(task, user_id)
+        prompt = self.SQL_PROMPT_TEMPLATE.format(schema=self.schema_text, task=task, user_id=user_id)
         prompt += (
             "\n\nIMPORTANT:\n"
             "Return ONLY the SQL statement.\n"
             "Do NOT wrap SQL in ``` code fences.\n"
             "Do NOT include any explanations or text outside the SQL.\n"
         )
-        raw = self._call_llm_raw(prompt)
+        raw = self.ask_llm(prompt)
         sql = self._clean_sql_from_response(raw)
         return sql
 
     def _process_db_user(self, tasks: List[str], user_id: str) -> List[Dict[str, str]]:
-        """
-        Convert list of db_user NL tasks into SQL strings.
-        Silent.
-        """
         out = []
         for t in tasks:
             sql = self._nl_to_sql(t, user_id)
             out.append({"task": t, "sql": sql})
         return out
 
-    # -------------------- Orchestration  --------------------
 
     def run(self, decomposed: Dict[str, Any], user_id: str) -> Dict[str, Any]:
-        """
-        Only process db_user (SQL generation).
-        No saving to file.
-        No db_llm or db_places for now.
-        """
-        print("\n[Federator] Starting federator run()")
+        print("\n[Federator][DB] Run")
         result = {
             "db_user_sql": []
         }
 
-        # --- db_user ---
         db_user_tasks = decomposed.get("db_user", [])
         if db_user_tasks:
             print(f"[Federator] Processing {len(db_user_tasks)} db_user task(s)...")
@@ -185,7 +145,7 @@ class Federator:
 # -------------------- Module-level wrapper --------------------
 
 def run(decomposed_json: Dict[str, Any], user_id: str):
-    federator = Federator()
+    federator = FederatorDB()
     return federator.run(decomposed_json, user_id)
 
 

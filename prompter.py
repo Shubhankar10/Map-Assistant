@@ -66,7 +66,7 @@ PROMPT_TEMPLATES = {
     - Example: mapping languages → states/countries, capitals, relationships.
 
     ### INSTRUCTION
-    Given the user query, break it into EXACT, ATOMIC tasks needed from each database.
+    Given the user query, break it into EXACT, ATOMIC tasks needed from each database. Do not think for too long, respond quickly in simpler words.
 
     ### CRITICAL RULES
     - **DO NOT chain tasks across DBs.**
@@ -143,7 +143,6 @@ PROMPT_TEMPLATES = {
     ### USER INTENT JSON
     "{{intent_json}}"
     """
-
 
 }
 

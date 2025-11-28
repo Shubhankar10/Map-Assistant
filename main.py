@@ -4,8 +4,8 @@ from steps_new import print_json
 
 from A_query_manager import QueryAnalyzer
 from B_decomposer import Decomposer
-from federation import run as federation_run
-from execution import run as execution_run
+from C_federator_DB import FederatorDB, run as federation_run
+from D_executor_DB import run as execution_run
 from steps_new import print_json
 
 def main(demo_query):
@@ -18,6 +18,7 @@ def main(demo_query):
     intent = analyzer.run(user_query = demo_query)
     print("User Intent")
     print_json(intent)
+
 #Decomposer
     decomposer = Decomposer()
     instructions = decomposer.run_with_raw_query(user_query = demo_query)
@@ -27,15 +28,19 @@ def main(demo_query):
 
 #Federator 
     user_id = "cf96c65d-2bbe-4384-82b5-118badd2892f"
-    plan = federation_run(instructions, user_id)
+    
+    federator = FederatorDB()
+    plan = federator.run(instructions, user_id)
+
+    # plan = federation_run(instructions, user_id)
 
     print("\nFEDERATION PLAN")
     print_json(plan)
 
 # Executor
-    result = execution_run(plan)
-    print("\nEXECUTION RESULT")
-    print_json(result)
+    # result = execution_run(plan)
+    # print("\nEXECUTION RESULT")
+    # print_json(result)
 
 
 if __name__ == "__main__":

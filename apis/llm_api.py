@@ -16,7 +16,7 @@ class LLMClient:
         print("[LLMClient] Client initialized successfully.")
 
 
-    def query(self, user_input: str, model: str = "deepseek-ai/deepseek-v3.1") -> str:
+    def slow_query(self, user_input: str, model: str = "deepseek-ai/deepseek-v3.1") -> str:
         # print(f"[LLMClient] Query started: '{user_input}'")
         print(f"[LLMClient] Query sent to model.")
         completion = self.client.chat.completions.create(
@@ -42,3 +42,20 @@ class LLMClient:
 
         print("[LLMClient] Query completed.")
         return response_text.strip()
+
+    def query(self, user_input: str, model: str = "deepseek-ai/deepseek-v3.1") -> str:
+        # print(f"[LLMClient] Query started: '{user_input}'")
+        print(f"[LLMClient] Query sent to model.")
+        
+        completion = self.client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": user_input}],
+            temperature=0.0,
+            top_p=0.9,
+            max_tokens=2048,
+            extra_body={"chat_template_kwargs": {"thinking": False}},
+            stream=False
+        )
+        
+        print("[LLMClient] Query completed.")
+        return completion.choices[0].message.content.strip()
