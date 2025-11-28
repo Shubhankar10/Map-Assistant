@@ -71,18 +71,18 @@ PROMPT_TEMPLATES = {
     ### CRITICAL RULES
     - **DO NOT chain tasks across DBs.**
     - Example: DB2 tasks must NOT reference “after DB3 finds X”.
-    - **If required data is not known yet, use placeholders.**
+    - **If required data is not known yet, use senteces in the end like.**
     - Examples:
-        - "<languages>"
-        - "<states>"
-        - "<countries>"
-        - "<cities>"
+        - "languages which are given at last."
+        - "states which are mentioned at end of this prompt"
     - **Tasks must be direct, standalone, and database-specific.**
     - **The generated instruction should not contain some indirect questions, everything should be direct
     - **Output must be valid JSON** with exactly these keys:
     - "db_user"
     - "db_llm"
     - "db_places"
+    - **For these Keys in JSON keep these 3 in the order when each is supposed to be executed **
+    - Example : db_llm before db_places and after db_user for the query to find resturants in cities where llm gives cities and places give resturants.
 
     ### OUTPUT FORMAT (JSON MANDATORY)
     "

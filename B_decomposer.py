@@ -22,7 +22,6 @@ class Decomposer:
         return data
     def run_with_raw_query(self, user_query: str) -> dict:
         
-
         prompt = get_prompt("Decomposer2", user_query=user_query)
 
         llm_response = ask_llm(prompt)
@@ -79,7 +78,5 @@ if __name__ == "__main__":
     result = qm.run_with_raw_query(user_query)
     # result = qm.run(user_intent)
 
-
     print("Breakdown:\n")
     print(json.dumps(result, indent=4))
-    

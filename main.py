@@ -32,7 +32,7 @@ def main(demo_query):
     print("\nFEDERATION PLAN")
     print_json(plan)
 
-# Execute plan 
+# Executor
     result = execution_run(plan)
     print("\nEXECUTION RESULT")
     print_json(result)
@@ -55,8 +55,7 @@ if __name__ == "__main__":
 
     
     demo_query = (
-        "List languages I can speak, along with Indian states and countries "
-        "where they're native. Also, suggest top tourist places in state capitals."
+            "List languages I can speak, along with the Indian states or countries' capitals where they're native. And, suggest the top tourist places in those cities."
     )
 
     # demo_query =  "Based on my favorite cuisines, tell me the cities where these cuisines are most popular and suggest top-rated restaurants in those cities."
