@@ -68,7 +68,6 @@ class PostgresDB:
             self.conn.rollback()
             raise
 
-    # ---------------- Generic Executor ---------------- #
     def execute_query(self, query: str, values: Optional[Tuple[Any, ...]] = None, fetch: str = None):
         """
         Simplified query executor.
@@ -95,11 +94,7 @@ class PostgresDB:
             print(f"Database Error: {e}")
             raise
 
-    # ------------------- USERS ------------------- #
     def add_user(self, first_name: str, last_name: Optional[str], email: str, password_hash: str) -> Dict:
-        """
-        Inserts a new user into the users table and returns the created record.
-        """
         query = """
             INSERT INTO users (first_name, last_name, email, password_hash)
             VALUES (%s, %s, %s, %s)
@@ -108,16 +103,10 @@ class PostgresDB:
         return self.execute_query(query, (first_name, last_name, email, password_hash), fetch='one')
 
     def get_user_by_id(self, user_id: str) -> Optional[Dict]:
-        """
-        Fetch a single user record by UUID.
-        """
         query = "SELECT * FROM users WHERE user_id = %s;"
         return self.execute_query(query, (user_id,), fetch='one')
 
     def delete_user(self, user_id: str) -> int:
-        """
-        Delete a user by UUID. Returns the number of rows deleted.
-        """
         query = "DELETE FROM users WHERE user_id = %s;"
         return self.execute_query(query, (user_id,))
 
@@ -280,174 +269,6 @@ class PostgresDB:
         """
         query = "DELETE FROM travel_preferences WHERE user_id = %s;"
         return self.execute_query(query, (user_id,))
-
-
-    # ------------------- TRIP ------------------- #
-    def add_trip(
-            self, 
-        user_id: str,
-        title: str,
-        city: Optional[str] = None,
-        country: Optional[str] = None,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
-        status: Optional[str] = "draft",
-        description: Optional[str] = None,
-        trip_type: Optional[str] = None,
-        total_budget: Optional[float] = None,
-        transport_mode_to_city: Optional[str] = None,
-        accommodation_type: Optional[str] = None,
-        tags: Optional[dict] = None,
-        rating: Optional[float] = None,
-        favorite_locations: Optional[dict] = None,
-    ) -> Dict:
-        """
-        Inserts a new record into the trips table and returns the created record.
-        """
-        tags_json = json.dumps(tags) if tags else None
-        favorite_locations_json = json.dumps(favorite_locations) if favorite_locations else None
-
-        query = """
-            INSERT INTO trips (
-                user_id, title, city, country, start_date, end_date, status,
-                description, trip_type, total_budget, transport_mode_to_city,
-                accommodation_type, tags, rating, favorite_locations
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            RETURNING *;
-        """
-
-        return self.execute_query(
-            query,
-            (
-                user_id, title, city, country, start_date, end_date, status,
-                description, trip_type, total_budget, transport_mode_to_city,
-                accommodation_type, tags_json, rating, favorite_locations_json
-            ),
-            fetch='one'
-        )
-
-    def get_trip_by_id(self, trip_id: str) -> Optional[Dict]:
-        """
-        Fetch a single trip record by trip_id UUID.
-        """
-        query = "SELECT * FROM trips WHERE trip_id = %s;"
-        return self.execute_query(query, (trip_id,), fetch='one')
-
-    def delete_trip(self, trip_id: str) -> int:
-        """
-        Delete a trip record by trip_id. Returns the number of rows deleted.
-        """
-        query = "DELETE FROM trips WHERE trip_id = %s;"
-        return self.execute_query(query, (trip_id,))
-
-
-
-    # ==============================
-    # TRIP JOURNALS FUNCTIONS
-    # ==============================
-
-    def add_trip_journal(
-        self, 
-        trip_id: str,
-        day: Optional[int] = None,
-        entry_text: Optional[str] = None,
-        location: Optional[dict] = None,
-        tags: Optional[dict] = None,
-        expenses: Optional[dict] = None,
-        visited_places: Optional[dict] = None,
-        recommended_for_next_time: Optional[str] = None,
-        mood: Optional[str] = None,
-        travel_companions: Optional[dict] = None,
-        transportation_used: Optional[dict] = None,
-        summary_generated: Optional[str] = None,
-        recommendations_generated: Optional[str] = None,
-    ) -> Dict:
-        """
-        Inserts a new record into the trip_journals table and returns the created record.
-        """
-
-        # ✅ Convert all dict fields to JSON strings
-        location_json = json.dumps(location) if location else None
-        tags_json = json.dumps(tags) if tags else None
-        expenses_json = json.dumps(expenses) if expenses else None
-        visited_places_json = json.dumps(visited_places) if visited_places else None
-        travel_companions_json = json.dumps(travel_companions) if travel_companions else None
-        transportation_used_json = json.dumps(transportation_used) if transportation_used else None
-
-        query = """
-            INSERT INTO trip_journals (
-                trip_id, day, entry_text, location, tags, expenses, visited_places,
-                recommended_for_next_time, mood, travel_companions, transportation_used,
-                summary_generated, recommendations_generated
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            RETURNING *;
-        """
-
-        return self.execute_query(
-            query,
-            (
-                trip_id, day, entry_text, location_json, tags_json, expenses_json,
-                visited_places_json, recommended_for_next_time, mood, travel_companions_json,
-                transportation_used_json, summary_generated, recommendations_generated
-            ),
-            fetch='one'
-        )
-
-    def get_trip_journals_by_trip_id(self, trip_id: str) -> List[Dict]:
-        """
-        Fetch all trip_journals records for a given trip UUID.
-        """
-        query = "SELECT * FROM trip_journals WHERE trip_id = %s;"
-        return self.execute_query(query, (trip_id,), fetch='all')
-
-    def delete_trip_journal(self, journal_id: str) -> int:
-        """
-        Delete a trip_journals record by journal_id. Returns the number of rows deleted.
-        """
-        query = "DELETE FROM trip_journals WHERE journal_id = %s;"
-        return self.execute_query(query, (journal_id,))
-
-
-    # ==============================
-    # ITINERARIES FUNCTIONS
-    # ==============================
-    def add_itinerary(
-            self, 
-            trip_id: str,
-            days: int,
-            pois: Optional[dict] = None
-        ) -> Dict:
-        """
-        Inserts a new record into the itineraries table and returns the created record.
-        """
-        query = """
-            INSERT INTO itineraries (
-                trip_id, days, pois
-            )
-            VALUES (%s, %s, %s)
-            RETURNING *;
-        """
-        return self.execute_query(
-            query,
-            (trip_id, days, pois),
-            fetch='one'
-        )
-
-    def get_itineraries_by_trip_id(self, trip_id: str) -> List[Dict]:
-        """
-        Fetch all itineraries records for a given trip UUID.
-        """
-        query = "SELECT * FROM itineraries WHERE trip_id = %s;"
-        return self.execute_query(query, (trip_id,), fetch='all')
-
-    def delete_itinerary(self, itinerary_id: str) -> int:
-        """
-        Delete an itineraries record by itinerary_id. Returns the number of rows deleted.
-        """
-        query = "DELETE FROM itineraries WHERE itinerary_id = %s;"
-        return self.execute_query(query, (itinerary_id,))
 
 
     # ------------------- Composite / DB-level fetches ------------------- #

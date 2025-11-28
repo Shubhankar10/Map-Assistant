@@ -1,16 +1,3 @@
-#!/usr/bin/env python3
-"""
-dp_populate.py
-
-Populate DB with 10 Indian users (custom list) using your PostgresDB class.
-- Uses config variables from steps.py (DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, DB_SCHEMA)
-- Truncates strings to safe lengths to avoid varchar overflow.
-- Keeps variety in locations / interests / travel prefs.
-
-Run:
-    python dp_populate.py
-"""
-
 import os
 import random
 from typing import List, Dict, Any, Optional
@@ -95,7 +82,7 @@ def generate_user_data(name: str, index: int):
         "aadhar_number": safe_str(indian_aadhar(), MAX_LENGTHS["aadhar_number"]),
         "passport_number": safe_str(indian_passport(), MAX_LENGTHS["passport_number"]),
         "driving_license_number": safe_str(indian_dl(), MAX_LENGTHS["driving_license_number"]),
-        "spoken_languages": ["Hindi", "English"],
+        "spoken_languages": ["Gujrati"],
         "understood_languages": ["Hindi", "English"],
         "native_language": "Hindi",
         "hometown": safe_str(location["city"], MAX_LENGTHS["hometown"]),

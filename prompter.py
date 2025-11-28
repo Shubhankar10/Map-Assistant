@@ -60,7 +60,7 @@ PROMPT_TEMPLATES = {
     - For tourist places, POIs, attractions, geo-data.
     - It is Google Places API, it contains only details about the listings on Google Maps.
 
-    3. **DB3:LLM Knowledge / Reasoning DB**
+    3. **DB3:LLM Knowledge Source / Reasoning DB**
     - For deriving missing information through reasoning.
     - and generic Data which is not avilable in the above databases, such as population, capitals, countries, .
     - Example: mapping languages → states/countries, capitals, relationships.
@@ -69,6 +69,7 @@ PROMPT_TEMPLATES = {
     Given the user query, break it into EXACT, ATOMIC tasks needed from each database. Do not think for too long, respond quickly in simpler words.
 
     ### CRITICAL RULES
+    - Give only single sentences for each DB, state directly what is needed. 
     - **DO NOT chain tasks across DBs.**
     - Example: DB2 tasks must NOT reference “after DB3 finds X”.
     - **If required data is not known yet, use senteces in the end like.**

@@ -80,6 +80,35 @@ def ask_llm(query: str) -> str:
 
 #DB STEPS --------------------------------------------------------------------------------------------------
 
+def run_sql(sql: str, fetch : Optional[str]):
+    if _db_client is None:
+        initialize_db_client()
+
+    print("\n[DB] Executing SQL:")
+    # print(sql.strip(), "\n")
+
+    result = _db_client.execute_query(sql, fetch=fetch)
+
+    return result
+
+def extract_values(row: dict) -> list:
+    output = []
+
+    for key, value in row.items():
+        if value is None:
+            continue
+
+        # If value is a list → extend into output
+        if isinstance(value, list):
+            output.extend([str(v) for v in value if v is not None])
+        else:
+            # Single scalar → append
+            output.append(str(value))
+
+    return output
+
+
+
 def add_demo_data():
     if _db_client is None:
         initialize_db_client()

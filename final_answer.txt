@@ -1,0 +1,30 @@
+---
+**Final Answer Summary**  
+Based on your profile, you speak Gujarati. This language is natively spoken in the Indian state of Gujarat and in Pakistan. The capital of Gujarat is Gandhinagar, and here are its top tourist attractions.
+
+**User-Relevant Insights**  
+- **Languages You Speak:** Gujarati  
+- **Indian State Where Gujarati is Native:** Gujarat  
+- **Countries Where Gujarati is Native:** India, Pakistan  
+- **State Capital:** Gandhinagar  
+
+**Recommended Places / Results**  
+Here are the top-rated tourist attractions in Gandhinagar, Gujarat:  
+
+1.  **Laser Show - Akshardham** (Rating: 4.7/5)  
+    A spectacular laser show combining lights, music, and storytelling to showcase Indian culture and history.  
+
+2.  **Dandi Kutir (Salt Mount) Museum** (Rating: 4.6/5)  
+    A museum dedicated to Mahatma Gandhi's life, featuring modern technology and realistic effects.  
+
+3.  **Punit Van** (Rating: 4.6/5)  
+    A peaceful park with a variety of trees, plants, a long jogging track, and opportunities for bird watching.  
+
+4.  **The Adalaj Stepwell (Adalaj Ni Vav)** (Rating: 4.5/5)  
+    A historical landmark featuring ancient architecture, intricate carvings, and a beautiful garden.  
+
+5.  **Aranya Udhyan** (Rating: 4.5/5)  
+    An ecological park with a serene lake, diverse flora and fauna, a butterfly park, and an amphitheater.  
+
+**Reasoning Notes**  
+Your spoken language was identified from your user profile. The native regions for Gujarati were derived from the LLM data. Tourist attractions were selected from the Places API data, filtered for high ratings and positive reviews to provide the best recommendations.
