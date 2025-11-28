@@ -21,7 +21,7 @@ _db_client = None
 # DB_HOST = "10.144.192.33"  
 DB_NAME = "map_assistant" 
 DB_SCHEMA = "public"
-DB_HOST = "localhost"
+DB_HOST = os.getenv("DB_HOST")
 DB_USER = "postgres"
 
 # Shubhankar Local
