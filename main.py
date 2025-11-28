@@ -60,8 +60,7 @@ if __name__ == "__main__":
 
     
     demo_query = (
-            "List languages I can speak, along with the Indian states or countries' capitals where they're native. And, suggest the top tourist places in those cities."
-    )
+            "Design a travel route that matches my travel pace, includes 3 to 4 major Indian cities, explains the best sequence to visit them, and suggests key attractions in each.")
 
     # demo_query =  "Based on my favorite cuisines, tell me the cities where these cuisines are most popular and suggest top-rated restaurants in those cities."
 

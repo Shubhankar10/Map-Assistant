@@ -18,25 +18,15 @@ _db_client = None
 
 
 # Port
-# # DB_HOST = "10.144.192.33"  
-# DB_NAME = "map_assistant" 
-# DB_SCHEMA = "public"
-# DB_HOST = "localhost"
-# DB_USER = "postgres"
-
-# # Shubhankar Local
-# # DB_PASSWORD = "1214" 
-# DB_PASSWORD = "jojo"
-
-
 # DB_HOST = "10.144.192.33"  
-DB_NAME = os.getenv("DB_NAME") 
-DB_SCHEMA = os.getenv("DB_SCHEMA")
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
+DB_NAME = "map_assistant" 
+DB_SCHEMA = "public"
+DB_HOST = "localhost"
+DB_USER = "postgres"
 
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-
+# Shubhankar Local
+DB_PASSWORD = "1214" 
+# DB_PASSWORD = "jojo"
 
 def initialize_llm_client():
     global _llm_client
