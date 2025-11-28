@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-from main import main
+from main2 import main
 
 def display_markdown(md_content: str):
     """

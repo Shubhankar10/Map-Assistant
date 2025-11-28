@@ -43,7 +43,7 @@ if __name__ == "__main__":
         "List languages I can speak, along with Indian states and countries "
         "where they're native. Also, suggest top tourist places in state capitals."
     )
-    user_query = "Find the population and best pizza places in my hometown and my current city"
+    # user_query = "Find the population and best pizza places in my hometown and my current city"
 
     user_intent = {
             "intent_summary": "The user wants to retrieve their spoken languages along with the Indian states and countries where those languages are native, and also receive suggestions for top tourist places in Indian state capitals.",

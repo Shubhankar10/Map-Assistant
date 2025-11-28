@@ -25,7 +25,7 @@ DB_HOST = "localhost"
 DB_USER = "postgres"
 
 # Shubhankar Local
-DB_PASSWORD = "1214" 
+DB_PASSWORD = os.getenv("DB_PASSWORD")
 # DB_PASSWORD = "jojo"
 
 def initialize_llm_client():

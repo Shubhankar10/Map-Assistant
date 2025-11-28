@@ -4,8 +4,12 @@ from steps_new import print_json
 
 from A_query_manager import QueryAnalyzer
 from B_decomposer import Decomposer
+
 from C_federator_DB import FederatorDB, run as federation_run
+from C_federator_places import FederatorPlaces
+
 from D_executor_DB import run as execution_run
+from D_executor_places import ExecutorPlaces
 from steps_new import print_json
 
 def main(demo_query):
@@ -26,21 +30,38 @@ def main(demo_query):
     print("Instructions ")
     print_json(instructions)
 
+# User DB
+
 #Federator 
-    user_id = "cf96c65d-2bbe-4384-82b5-118badd2892f"
+    # user_id = "cf96c65d-2bbe-4384-82b5-118badd2892f"
     
-    federator = FederatorDB()
-    plan = federator.run(instructions, user_id)
+    # federator = FederatorDB()
+    # plan = federator.run(instructions, user_id)
 
-    # plan = federation_run(instructions, user_id)
+    # # plan = federation_run(instructions, user_id)
 
-    print("\nFEDERATION PLAN")
-    print_json(plan)
+    # print("\nFEDERATION PLAN")
+    # print_json(plan)
 
-# Executor
-    # result = execution_run(plan)
-    # print("\nEXECUTION RESULT")
-    # print_json(result)
+
+    
+# Places API
+    print(instructions["db_places"])
+    data = "Delhi"
+#Federator
+    federator = FederatorPlaces(db_places = instructions["db_places"], data = data)
+
+    poi_queries = federator.run()
+    print("[Main] Got POI Queries : ", poi_queries)
+#Executor
+    executor = ExecutorPlaces(poi_queries)
+    output = executor.run()
+
+    print("[Main] Extracted Places")
+    for p in output:
+        print(f"#{p.get('name')}")
+    # print(output)
+
 
 
 if __name__ == "__main__":
